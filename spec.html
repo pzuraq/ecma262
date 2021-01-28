@@ -5940,7 +5940,7 @@
           1. Let _initValue_ be ? Call(_initializer_, _receiver_).
         1. Else, let _initValue_ be *undefined*.
         1. If _fieldRecord_.[[IsAnonymousFunctionDefinition]] is *true*, then
-          1. Let _hasNameProperty_ be ? HasOwnProperty(_initValue_, `"name"`).
+          1. Let _hasNameProperty_ be ? HasOwnProperty(_initValue_, *"name"*).
           1. If _hasNameProperty_ is *false*, perform ! SetFunctionName(_initValue_, _fieldName_).
         1. If _fieldName_ is a Private Name, then
           1. Perform ? PrivateFieldAdd(_fieldName_, _receiver_, _initValue_).
@@ -5958,7 +5958,7 @@
         1. If _constructor_.[[PrivateBrand]] is not *undefined*, then
           1. Perform ? PrivateBrandAdd(_O_, _constructor_.[[PrivateBrand]]).
         1. Let _fields_ be the value of _constructor_.[[Fields]].
-        1. For each element _fieldRecord_ of _fields_ in List order, do
+        1. For each element _fieldRecord_ of _fields_, do
           1. Perform ? DefineField(_O_, _fieldRecord_).
       </emu-alg>
     </emu-clause>
@@ -21212,7 +21212,7 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-class-definitions-static-semantics-allprivateidentifiersvalid">
+    <emu-clause id="sec-class-definitions-static-semantics-allprivateidentifiersvalid" type="sdo" aoid="AllPrivateIdentifiersValid">
       <h1>Static Semantics: AllPrivateIdentifiersValid</h1>
       <p>With parameter _names_.</p>
       <emu-grammar>MemberExpression : MemberExpression `.` PrivateIdentifier</emu-grammar>
@@ -21237,7 +21237,7 @@
       <p>For all other grammatical productions, recurse on subexpressions/substatements, passing in the _names_ of the caller. If all pieces return *true*, then return *true*. If any returns *false*, return *false*.</p>
     </emu-clause>
 
-    <emu-clause id="sec-class-definitions-static-semantics-privateboundidentifiers">
+    <emu-clause id="sec-class-definitions-static-semantics-privateboundidentifiers" type="sdo" aoid="PrivateBoundIdentifiers">
       <h1>Static Semantics: PrivateBoundIdentifiers</h1>
       <emu-grammar>
         FieldDefinition : ClassElementName Initializer?
@@ -21250,7 +21250,7 @@
         ClassElementName : PrivateIdentifier
       </emu-grammar>
       <emu-alg>
-        1. Return a new List containing the StringValue of |PrivateIdentifier|.
+        1. Return a List whose sole element is the StringValue of |PrivateIdentifier|.
       </emu-alg>
 
       <emu-grammar>
@@ -21291,7 +21291,7 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-class-definitions-static-semantics-containsarguments">
+    <emu-clause id="sec-class-definitions-static-semantics-containsarguments" type="sdo" aoid="PrivateBoundIdentifiers">
       <h1>Static Semantics: ContainsArguments</h1>
       <emu-grammar>
         IdentifierReference : Identifier
@@ -21368,7 +21368,7 @@
       <p>For all other grammatical productions, recurse on all nonterminals. If any piece returns *true*, then return *true*. Otherwise return *false*.</p>
     </emu-clause>
 
-    <emu-clause id="sec-class-definitions-runtime-semantics-classfielddefinitionevaluation">
+    <emu-clause id="sec-class-definitions-runtime-semantics-classfielddefinitionevaluation" type="sdo" aoid="PrivateBoundIdentifiers">
       <h1>Runtime Semantics: ClassFieldDefinitionEvaluation</h1>
 
       <p>With parameter _homeObject_.</p>
@@ -21383,7 +21383,7 @@
           1. Let _lex_ be the LexicalEnvironment of the running execution context.
           1. Let _formalParameterList_ be an instance of the production <emu-grammar>FormalParameters : [empty]</emu-grammar>.
           1. Let _privateScope_ be the PrivateEnvironment of the running execution context.
-          1. Let _initializer_ be FunctionCreate(~Method~, _formalParameterList_, |Initializer|, _lex_, _privateScope_).
+          1. Let _initializer_ be ! OrdinaryFunctionCreate(~Method~, _formalParameterList_, |Initializer|, _lex_, _privateScope_).
           1. Perform MakeMethod(_initializer_, _homeObject_).
           1. Set _initializer_.[[ClassFieldInitializer]] to *true*.
           1. Let _isAnonymousFunctionDefinition_ be IsAnonymousFunctionDefinition(|Initializer|).
@@ -21394,7 +21394,7 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-class-definitions-static-semantics-classelementevaluation">
+    <emu-clause id="sec-class-definitions-static-semantics-classelementevaluation" type="sdo" aoid="PrivateBoundIdentifiers">
       <h1>Runtime Semantics: ClassElementEvaluation</h1>
       <p>With parameters _object_ and _enumerable_.</p>
 
@@ -21435,10 +21435,9 @@
           1. Perform _classScope_.CreateImmutableBinding(_classBinding_, *true*).
         1. Let _outerPrivateEnvironment_ be the PrivateEnvironment of the running execution context.
         1. Let _classPrivateEnvironment_ be NewDeclarativeEnvironment(_outerPrivateEnvironment_).
-        1. Let _classPrivate_ be _classPrivateEnvironment_'s EnvironmentRecord.
         1. If |ClassBody_opt| is present, then
           1. For each element _dn_ of the PrivateBoundIdentifiers of |ClassBody_opt|, do
-            1. Perform _classPrivate_.CreateImmutableBinding(_dn_, *true*).
+            1. Perform _classPrivateEnvironment_.CreateImmutableBinding(_dn_, *true*).
         1. If |ClassHeritage_opt| is not present, then
           1. Let _protoParent_ be %Object.prototype%.
           1. Let _constructorParent_ be %Function.prototype%.
@@ -21481,7 +21480,7 @@
         1. Else, let _elements_ be NonConstructorMethodDefinitions of |ClassBody|.
         1. Let _instanceFields_ be a new empty List.
         1. Let _staticFields_ be a new empty List.
-        1. For each |ClassElement| _e_ in order from _elements_, do
+        1. For each |ClassElement| _e_ of _elements_, do
           1. If IsStatic of _e_ is *false*, then
             1. Let _field_ be ClassElementEvaluation of _e_ with arguments _proto_ and *false*.
           1. Else,
@@ -21555,19 +21554,18 @@
       </emu-alg>
       <emu-grammar>ClassElementName : PropertyName</emu-grammar>
       <emu-alg>
-        1. Return the result of evaluating PropertyName.
+        1. Return the result of evaluating |PropertyName|.
       </emu-alg>
       <emu-grammar>ClassElementName : PrivateIdentifier</emu-grammar>
       <emu-alg>
         1. Let _privateIdentifier_ be StringValue of |PrivateIdentifier|.
-        1. Let _scope_ be the running execution context's PrivateEnvironment.
-        1. Let _scopeEnvRec_ be _scope_'s EnvironmentRecord.
-        1. Assert: _scopeEnvRec_ has a binding for _privateIdentifier_.
-        1. If the binding for _privateIdentifier_ in _scopeEnvRec_ is an uninitialized binding, then
+        1. Let _privateEnvRec_ be the running execution context's PrivateEnvironment.
+        1. Assert: _privateEnvRec_ has a binding for _privateIdentifier_.
+        1. If the binding for _privateIdentifier_ in _privateEnvRec_ is an uninitialized binding, then
           1. Let _privateName_ be NewPrivateName(_privateIdentifier_).
-          1. Perform ! _scopeEnvRec_.InitializeBinding(_privateIdentifier_, _privateName_).
+          1. Perform ! _privateEnvRec_.InitializeBinding(_privateIdentifier_, _privateName_).
         1. Else,
-          1. Let _privateName_ be ! _scopeEnvRec_.GetBindingValue(_privateIdentifier_).
+          1. Let _privateName_ be ! _privateEnvRec_.GetBindingValue(_privateIdentifier_).
           1. NOTE: The only case where this may occur is in getter/setter pairs; other duplicates are prohibited as a Syntax Error.
           1. Assert: _privateName_ is a Private Name.
         1. Assert: _privateName_.[[Description]] is _privateIdentifier_.
@@ -24541,7 +24539,7 @@
           1. Set _evalContext_'s LexicalEnvironment to _lexEnv_.
           1. Set _evalContext_'s PrivateEnvironment to _privateEnv_.
           1. Push _evalContext_ onto the execution context stack; _evalContext_ is now the running execution context.
-          1. Let _result_ be EvalDeclarationInstantiation(_body_, _varEnv_, _lexEnv_, _privateEnv_ _strictEval_).
+          1. Let _result_ be EvalDeclarationInstantiation(_body_, _varEnv_, _lexEnv_, _privateEnv_, _strictEval_).
           1. If _result_.[[Type]] is ~normal~, then
             1. Set _result_ to the result of evaluating _body_.
           1. If _result_.[[Type]] is ~normal~ and _result_.[[Value]] is ~empty~, then
@@ -24592,9 +24590,9 @@
           1. Let _privateIdentifiers_ be a new empty List.
           1. Let _privEnv_ be _privateEnv_.
           1. Repeat, while _privEnv_ is not *null*,
-            1. For each binding named _N_ in _privEnv_'s EnvironmentRecord, do
+            1. For each binding named _N_ in _privEnv_, do
               1. If _privateIdentifiers_ does not contain _N_, append _N_ to _privateIdentifiers_.
-            1. Set _privEnv_ to _privEnv_'s outer environment reference.
+            1. Set _privEnv_ to _privEnv_.[[OuterEnv]].
           1. If AllPrivateIdentifiersValid of _body_ with argument _privateIdentifiers_ is *false*, throw a *SyntaxError* exception.
           1. Let _functionsToInitialize_ be a new empty List.
           1. Let _declaredFunctionNames_ be a new empty List.
@@ -41345,8 +41343,8 @@ THH:mm:ss.sss
     <emu-prodref name="ClassBody"></emu-prodref>
     <emu-prodref name="ClassElementList"></emu-prodref>
     <emu-prodref name="ClassElement"></emu-prodref>
-    <emu-prodref name="ClassElementName"></emu-prodref>
     <emu-prodref name="FieldDefinition"></emu-prodref>
+    <emu-prodref name="ClassElementName"></emu-prodref>
   </emu-annex>
 
   <emu-annex id="sec-scripts-and-modules">
