@@ -5925,7 +5925,7 @@
         1. Perform ? PrivateBrandCheck(_O_, _P_).
         1. If _P_ does not have a [[Set]] field, throw a *TypeError* exception.
         1. Let _setter_ be _P_.[[Set]].
-        1. Perform ? Call(_setter_, _O_, _value_).
+        1. Perform ? Call(_setter_, _O_, &laquo; _value_ &rqauo;).
       </emu-alg>
     </emu-clause>
 
@@ -21291,7 +21291,7 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-class-definitions-static-semantics-containsarguments" type="sdo" aoid="PrivateBoundIdentifiers">
+    <emu-clause id="sec-class-definitions-static-semantics-containsarguments" type="sdo" aoid="ContainsArguments">
       <h1>Static Semantics: ContainsArguments</h1>
       <emu-grammar>
         IdentifierReference : Identifier
@@ -21368,7 +21368,7 @@
       <p>For all other grammatical productions, recurse on all nonterminals. If any piece returns *true*, then return *true*. Otherwise return *false*.</p>
     </emu-clause>
 
-    <emu-clause id="sec-class-definitions-runtime-semantics-classfielddefinitionevaluation" type="sdo" aoid="PrivateBoundIdentifiers">
+    <emu-clause id="sec-class-definitions-runtime-semantics-classfielddefinitionevaluation" type="sdo" aoid="ClassFieldDefinitionEvaluation">
       <h1>Runtime Semantics: ClassFieldDefinitionEvaluation</h1>
 
       <p>With parameter _homeObject_.</p>
@@ -21394,7 +21394,7 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-class-definitions-static-semantics-classelementevaluation" type="sdo" aoid="PrivateBoundIdentifiers">
+    <emu-clause id="sec-class-definitions-static-semantics-classelementevaluation" type="sdo" aoid="ClassElementEvaluation">
       <h1>Runtime Semantics: ClassElementEvaluation</h1>
       <p>With parameters _object_ and _enumerable_.</p>
 
@@ -21500,7 +21500,7 @@
           1. Set _F_.[[PrivateBrand]] to _proto_.
         1. If PrivateBoundIdentifiers of |ClassBody| contains a Private Name _P_ such that _P_.[[Kind]] is either ~method~ or ~accessor~ and _P_.[[Brand]] is _F_, then
           1. Perform ? PrivateBrandAdd(_F_, _F_).
-        1. For each element _fieldRecord_ of _staticFields_ in List order, do
+        1. For each element _fieldRecord_ of _staticFields_, do
           1. Perform ? DefineField(_F_, _fieldRecord_).
         1. Set the running execution context's PrivateEnvironment to _outerPrivateEnvironment_.
         1. Return _F_.
@@ -24507,7 +24507,7 @@
               1. Set _inFunction_ to *true*.
               1. Set _inMethod_ to _thisEnvRec_.HasSuperBinding().
               1. If _F_.[[ConstructorKind]] is ~derived~, set _inDerivedConstructor_ to *true*.
-              1. Let _inClassFieldInitializer_ be _F_.[[ClassFieldInitializer]].
+              1. Set _inClassFieldInitializer_ to _F_.[[ClassFieldInitializer]].
           1. Perform the following substeps in an implementation-defined order, possibly interleaving parsing and error detection:
             1. Let _script_ be ParseText(! StringToCodePoints(_x_), |Script|).
             1. If _script_ is a List of errors, throw a *SyntaxError* exception.
