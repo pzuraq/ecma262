@@ -20209,8 +20209,8 @@
       <emu-alg>
         1. If _name_ is not present, set _name_ to *""*.
         1. Let _scope_ be the LexicalEnvironment of the running execution context.
+        1. Let _privateScope_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |FunctionExpression|.
-        1. Let _privateScope_ be the PrivateEnvironment of the running execution context.
         1. Let _closure_ be OrdinaryFunctionCreate(%Function.prototype%, _sourceText_, |FormalParameters|, |FunctionBody|, ~non-lexical-this~, _scope_, _privateScope_).
         1. Perform SetFunctionName(_closure_, _name_).
         1. Perform MakeConstructor(_closure_).
@@ -20223,8 +20223,9 @@
         1. Let _scope_ be the running execution context's LexicalEnvironment.
         1. Let _funcEnv_ be NewDeclarativeEnvironment(_scope_).
         1. Perform _funcEnv_.CreateImmutableBinding(_name_, *false*).
+        1. Let _privateScope_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |FunctionExpression|.
-        1. Let _closure_ be OrdinaryFunctionCreate(%Function.prototype%, _sourceText_, |FormalParameters|, |FunctionBody|, ~non-lexical-this~, _funcEnv_).
+        1. Let _closure_ be OrdinaryFunctionCreate(%Function.prototype%, _sourceText_, |FormalParameters|, |FunctionBody|, ~non-lexical-this~, _funcEnv_, _privateScope_).
         1. Perform SetFunctionName(_closure_, _name_).
         1. Perform MakeConstructor(_closure_).
         1. Perform _funcEnv_.InitializeBinding(_name_, _closure_).
@@ -20371,8 +20372,8 @@
       <emu-alg>
         1. If _name_ is not present, set _name_ to *""*.
         1. Let _scope_ be the LexicalEnvironment of the running execution context.
+        1. Let _privateScope_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |ArrowFunction|.
-        1. Let _privateScope_ be the PrivateEnvironment of the running execution context.
         1. Let _parameters_ be CoveredFormalsList of |ArrowParameters|.
         1. [id="step-arrowfunction-evaluation-functioncreate"] Let _closure_ be OrdinaryFunctionCreate(%Function.prototype%, _sourceText_, _parameters_, |ConciseBody|, ~lexical-this~, _scope_, _privateScope_).
         1. Perform SetFunctionName(_closure_, _name_).
@@ -20501,7 +20502,7 @@
         1. Let _propKey_ be the result of evaluating |ClassElementName|.
         1. ReturnIfAbrupt(_propKey_).
         1. Let _scope_ be the running execution context's LexicalEnvironment.
-        1. Let _privateScope_ be the PrivateEnvironment of the running execution context.
+        1. Let _privateScope_ be the running execution context's PrivateEnvironment.
         1. If _functionPrototype_ is present, then
           1. Let _prototype_ be _functionPrototype_.
         1. Else,
@@ -20526,7 +20527,7 @@
         1. Let _propKey_ be the result of evaluating |ClassElementName|.
         1. ReturnIfAbrupt(_propKey_).
         1. Let _scope_ be the running execution context's LexicalEnvironment.
-        1. Let _privateScope_ be the PrivateEnvironment of the running execution context.
+        1. Let _privateScope_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |MethodDefinition|.
         1. Let _formalParameterList_ be an instance of the production <emu-grammar>FormalParameters : [empty]</emu-grammar>.
         1. Let _closure_ be OrdinaryFunctionCreate(%Function.prototype%, _sourceText_, _formalParameterList_, |FunctionBody|, ~non-lexical-this~, _scope_, _privateScope_).
@@ -20551,7 +20552,7 @@
         1. Let _propKey_ be the result of evaluating |ClassElementName|.
         1. ReturnIfAbrupt(_propKey_).
         1. Let _scope_ be the running execution context's LexicalEnvironment.
-        1. Let _privateScope_ be the PrivateEnvironment of the running execution context.
+        1. Let _privateScope_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |MethodDefinition|.
         1. Let _closure_ be OrdinaryFunctionCreate(%Function.prototype%, _sourceText_, |PropertySetParameterList|, |FunctionBody|, ~non-lexical-this~, _scope_, _privateScope_).
         1. Perform MakeMethod(_closure_, _object_).
@@ -20575,8 +20576,9 @@
         1. Let _propKey_ be the result of evaluating |ClassElementName|.
         1. ReturnIfAbrupt(_propKey_).
         1. Let _scope_ be the running execution context's LexicalEnvironment.
+        1. Let _privateScope_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |GeneratorMethod|.
-        1. Let _closure_ be OrdinaryFunctionCreate(%GeneratorFunction.prototype%, _sourceText_, |UniqueFormalParameters|, |GeneratorBody|, ~non-lexical-this~, _scope_).
+        1. Let _closure_ be OrdinaryFunctionCreate(%GeneratorFunction.prototype%, _sourceText_, |UniqueFormalParameters|, |GeneratorBody|, ~non-lexical-this~, _scope_, _privateScope_).
         1. Perform MakeMethod(_closure_, _object_).
         1. Perform SetFunctionName(_closure_, _propKey_).
         1. Let _prototype_ be ! OrdinaryObjectCreate(%GeneratorFunction.prototype.prototype%).
@@ -20591,8 +20593,9 @@
         1. Let _propKey_ be the result of evaluating |ClassElementName|.
         1. ReturnIfAbrupt(_propKey_).
         1. Let _scope_ be the running execution context's LexicalEnvironment.
+        1. Let _privateScope_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |AsyncGeneratorMethod|.
-        1. Let _closure_ be ! OrdinaryFunctionCreate(%AsyncGeneratorFunction.prototype%, _sourceText_, |UniqueFormalParameters|, |AsyncGeneratorBody|, ~non-lexical-this~, _scope_).
+        1. Let _closure_ be ! OrdinaryFunctionCreate(%AsyncGeneratorFunction.prototype%, _sourceText_, |UniqueFormalParameters|, |AsyncGeneratorBody|, ~non-lexical-this~, _scope_, _privateScope_).
         1. Perform ! MakeMethod(_closure_, _object_).
         1. Perform ! SetFunctionName(_closure_, _propKey_).
         1. Let _prototype_ be ! OrdinaryObjectCreate(%AsyncGeneratorFunction.prototype.prototype%).
@@ -20607,7 +20610,7 @@
         1. Let _propKey_ be the result of evaluating |ClassElementName|.
         1. ReturnIfAbrupt(_propKey_).
         1. Let _scope_ be the LexicalEnvironment of the running execution context.
-        1. Let _privateScope_ be the PrivateEnvironment of the running execution context.
+        1. Let _privateScope_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |AsyncMethod|.
         1. Let _closure_ be ! OrdinaryFunctionCreate(%AsyncFunction.prototype%, _sourceText_, |UniqueFormalParameters|, |AsyncFunctionBody|, ~non-lexical-this~, _scope_, _privateScope_).
         1. Perform ! MakeMethod(_closure_, _object_).
@@ -20751,7 +20754,7 @@
       <emu-alg>
         1. If _name_ is not present, set _name_ to *""*.
         1. Let _scope_ be the LexicalEnvironment of the running execution context.
-        1. Let _privateScope_ be the PrivateEnvironment of the running execution context.
+        1. Let _privateScope_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |GeneratorExpression|.
         1. Let _closure_ be OrdinaryFunctionCreate(%GeneratorFunction.prototype%, _sourceText_, |FormalParameters|, |GeneratorBody|, ~non-lexical-this~, _scope_, _privateScope_).
         1. Perform SetFunctionName(_closure_, _name_).
@@ -20764,9 +20767,9 @@
         1. Assert: _name_ is not present.
         1. Set _name_ to StringValue of |BindingIdentifier|.
         1. Let _scope_ be the running execution context's LexicalEnvironment.
-        1. Let _privateScope_ be the PrivateEnvironment of the running execution context.
         1. Let _funcEnv_ be NewDeclarativeEnvironment(_scope_).
         1. Perform _funcEnv_.CreateImmutableBinding(_name_, *false*).
+        1. Let _privateScope_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |GeneratorExpression|.
         1. Let _closure_ be OrdinaryFunctionCreate(%GeneratorFunction.prototype%, _sourceText_, |FormalParameters|, |GeneratorBody|, ~non-lexical-this~, _funcEnv_, _privateScope_).
         1. Perform SetFunctionName(_closure_, _name_).
@@ -20965,7 +20968,7 @@
       <emu-alg>
         1. If _name_ is not present, set _name_ to *""*.
         1. Let _scope_ be the LexicalEnvironment of the running execution context.
-        1. Let _privateScope_ be the PrivateEnvironment of the running execution context.
+        1. Let _privateScope_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |AsyncGeneratorExpression|.
         1. Let _closure_ be ! OrdinaryFunctionCreate(%AsyncGeneratorFunction.prototype%, _sourceText_, |FormalParameters|, |AsyncGeneratorBody|, ~non-lexical-this~, _scope_, _privateScope_).
         1. Perform SetFunctionName(_closure_, _name_).
@@ -20980,9 +20983,9 @@
         1. Assert: _name_ is not present.
         1. Set _name_ to StringValue of |BindingIdentifier|.
         1. Let _scope_ be the running execution context's LexicalEnvironment.
-        1. Let _privateScope_ be the PrivateEnvironment of the running execution context.
         1. Let _funcEnv_ be ! NewDeclarativeEnvironment(_scope_).
         1. Perform ! _funcEnv_.CreateImmutableBinding(_name_, *false*).
+        1. Let _privateScope_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |AsyncGeneratorExpression|.
         1. Let _closure_ be ! OrdinaryFunctionCreate(%AsyncGeneratorFunction.prototype%, _sourceText_, |FormalParameters|, |AsyncGeneratorBody|, ~non-lexical-this~, _funcEnv_, _privateScope_).
         1. Perform ! SetFunctionName(_closure_, _name_).
@@ -21382,7 +21385,7 @@
         1. If |Initializer_opt| is present, then
           1. Let _lex_ be the LexicalEnvironment of the running execution context.
           1. Let _formalParameterList_ be an instance of the production <emu-grammar>FormalParameters : [empty]</emu-grammar>.
-          1. Let _privateScope_ be the PrivateEnvironment of the running execution context.
+          1. Let _privateScope_ be the running execution context's PrivateEnvironment.
           1. Let _initializer_ be ! OrdinaryFunctionCreate(~Method~, _formalParameterList_, |Initializer|, _lex_, _privateScope_).
           1. Perform MakeMethod(_initializer_, _homeObject_).
           1. Set _initializer_.[[ClassFieldInitializer]] to *true*.
@@ -21433,7 +21436,7 @@
         1. Let _classScope_ be NewDeclarativeEnvironment(_env_).
         1. If _classBinding_ is not *undefined*, then
           1. Perform _classScope_.CreateImmutableBinding(_classBinding_, *true*).
-        1. Let _outerPrivateEnvironment_ be the PrivateEnvironment of the running execution context.
+        1. Let _outerPrivateEnvironment_ be the running execution context's PrivateEnvironment.
         1. Let _classPrivateEnvironment_ be NewDeclarativeEnvironment(_outerPrivateEnvironment_).
         1. If |ClassBody_opt| is present, then
           1. For each element _dn_ of the PrivateBoundIdentifiers of |ClassBody_opt|, do
@@ -21679,7 +21682,7 @@
       <emu-alg>
         1. If _name_ is not present, set _name_ to *""*.
         1. Let _scope_ be the LexicalEnvironment of the running execution context.
-        1. Let _privateScope_ be the PrivateEnvironment of the running execution context.
+        1. Let _privateScope_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |AsyncFunctionExpression|.
         1. Let _closure_ be ! OrdinaryFunctionCreate(%AsyncFunction.prototype%, _sourceText_, |FormalParameters|, |AsyncFunctionBody|, ~non-lexical-this~, _scope_, _privateScope_).
         1. Perform SetFunctionName(_closure_, _name_).
@@ -21692,9 +21695,9 @@
         1. Assert: _name_ is not present.
         1. Set _name_ to StringValue of |BindingIdentifier|.
         1. Let _scope_ be the LexicalEnvironment of the running execution context.
-        1. Let _privateScope_ be the PrivateEnvironment of the running execution context.
         1. Let _funcEnv_ be ! NewDeclarativeEnvironment(_scope_).
         1. Perform ! _funcEnv_.CreateImmutableBinding(_name_, *false*).
+        1. Let _privateScope_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |AsyncFunctionExpression|.
         1. Let _closure_ be ! OrdinaryFunctionCreate(%AsyncFunction.prototype%, _sourceText_, |FormalParameters|, |AsyncFunctionBody|, ~non-lexical-this~, _funcEnv_, _privateScope_).
         1. Perform ! SetFunctionName(_closure_, _name_).
@@ -21855,7 +21858,7 @@
       <emu-alg>
         1. If _name_ is not present, set _name_ to *""*.
         1. Let _scope_ be the LexicalEnvironment of the running execution context.
-        1. Let _privateScope_ be the PrivateEnvironment of the running execution context.
+        1. Let _privateScope_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |AsyncArrowFunction|.
         1. Let _parameters_ be |AsyncArrowBindingIdentifier|.
         1. Let _closure_ be ! OrdinaryFunctionCreate(%AsyncFunction.prototype%, _sourceText_, _parameters_, |AsyncConciseBody|, ~lexical-this~, _scope_, _privateScope_).
@@ -21868,7 +21871,7 @@
       <emu-alg>
         1. If _name_ is not present, set _name_ to *""*.
         1. Let _scope_ be the LexicalEnvironment of the running execution context.
-        1. Let _privateScope_ be the PrivateEnvironment of the running execution context.
+        1. Let _privateScope_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |AsyncArrowFunction|.
         1. Let _head_ be CoveredAsyncArrowHead of |CoverCallExpressionAndAsyncArrowHead|.
         1. Let _parameters_ be the |ArrowFormalParameters| of _head_.
