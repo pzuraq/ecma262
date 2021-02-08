@@ -11208,6 +11208,17 @@
             *true* if this is a class field initializer, *false* otherwise.
           </td>
         </tr>
+        <tr>
+          <td>
+            [[PrivateBrand]]
+          </td>
+          <td>
+            Object | *undefined*
+          </td>
+          <td>
+            TODO
+          </td>
+        </tr>
         </tbody>
       </table>
     </emu-table>
@@ -11454,8 +11465,8 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-define-ordinary-method" aoid="DefineOrdinaryMethod">
-      <h1>DefineOrdinaryMethod ( _key_, _homeObject_, _closure_, _enumerable_ )</h1>
+    <emu-clause id="sec-definemethodproperty" aoid="DefineMethodProperty">
+      <h1>DefineMethodProperty ( _key_, _homeObject_, _closure_, _enumerable_ )</h1>
       <emu-alg>
         1. Perform SetFunctionName(_closure_, _key_).
         1. If _key_ is a Private Name, then
@@ -20520,7 +20531,7 @@
       <emu-grammar>MethodDefinition : ClassElementName `(` UniqueFormalParameters `)` `{` FunctionBody `}`</emu-grammar>
       <emu-alg>
         1. Let _methodDef_ be ? DefineMethod of |MethodDefinition| with argument _object_.
-        1. Perform ? DefineOrdinaryMethod(_methodDef_.[[Key]], _object_, _methodDef_.[[Closure]], _enumerable_).
+        1. Perform ? DefineMethodProperty(_methodDef_.[[Key]], _object_, _methodDef_.[[Closure]], _enumerable_).
       </emu-alg>
       <emu-grammar>MethodDefinition : `get` ClassElementName `(` `)` `{` FunctionBody `}`</emu-grammar>
       <emu-alg>
@@ -20614,7 +20625,7 @@
         1. Let _sourceText_ be the source text matched by |AsyncMethod|.
         1. Let _closure_ be ! OrdinaryFunctionCreate(%AsyncFunction.prototype%, _sourceText_, |UniqueFormalParameters|, |AsyncFunctionBody|, ~non-lexical-this~, _scope_, _privateScope_).
         1. Perform ! MakeMethod(_closure_, _object_).
-        1. Perform ? DefineOrdinaryMethod(_propKey_, _object_, _closure_, _enumerable_).
+        1. Perform ? DefineMethodProperty(_propKey_, _object_, _closure_, _enumerable_).
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -21502,9 +21513,15 @@
         1. If PrivateBoundIdentifiers of |ClassBody| contains a Private Name _P_ such that _P_.[[Kind]] is either ~method~ or ~accessor~ and _P_.[[Brand]] is _proto_, then
           1. Set _F_.[[PrivateBrand]] to _proto_.
         1. If PrivateBoundIdentifiers of |ClassBody| contains a Private Name _P_ such that _P_.[[Kind]] is either ~method~ or ~accessor~ and _P_.[[Brand]] is _F_, then
-          1. Perform ? PrivateBrandAdd(_F_, _F_).
+          1. Let _result_ be PrivateBrandAdd(_F_, _F_).
+          1. If _result_ is an abrupt completion, then
+            1. Set the running execution context's PrivateEnvironment to _outerPrivateEnvironment_.
+            1. Return _result_.
         1. For each element _fieldRecord_ of _staticFields_, do
-          1. Perform ? DefineField(_F_, _fieldRecord_).
+          1. Let _result_ be DefineField(_F_, _fieldRecord_).
+          1. If _result_ is an abrupt completion, then
+            1. Set the running execution context's PrivateEnvironment to _outerPrivateEnvironment_.
+            1. Return _result_.
         1. Set the running execution context's PrivateEnvironment to _outerPrivateEnvironment_.
         1. Return _F_.
       </emu-alg>
@@ -21568,7 +21585,7 @@
           1. Let _privateName_ be NewPrivateName(_privateIdentifier_).
           1. Perform ! _privateEnvRec_.InitializeBinding(_privateIdentifier_, _privateName_).
         1. Else,
-          1. Let _privateName_ be ! _privateEnvRec_.GetBindingValue(_privateIdentifier_).
+          1. Let _privateName_ be ! _privateEnvRec_.GetBindingValue(_privateIdentifier_, *true*).
           1. NOTE: The only case where this may occur is in getter/setter pairs; other duplicates are prohibited as a Syntax Error.
           1. Assert: _privateName_ is a Private Name.
         1. Assert: _privateName_.[[Description]] is _privateIdentifier_.
