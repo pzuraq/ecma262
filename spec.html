@@ -2371,7 +2371,7 @@
         <p>The actual semantics of objects, in ECMAScript, are specified via algorithms called <em>internal methods</em>. Each object in an ECMAScript engine is associated with a set of internal methods that defines its runtime behaviour. These internal methods are not part of the ECMAScript language. They are defined by this specification purely for expository purposes. However, each object within an implementation of ECMAScript must behave as specified by the internal methods associated with it. The exact manner in which this is accomplished is determined by the implementation.</p>
         <p>Internal method names are polymorphic. This means that different object values may perform different algorithms when a common internal method name is invoked upon them. That actual object upon which an internal method is invoked is the &ldquo;target&rdquo; of the invocation. If, at runtime, the implementation of an algorithm attempts to use an internal method of an object that the object does not support, a *TypeError* exception is thrown.</p>
         <p>Internal slots correspond to internal state that is associated with objects and used by various ECMAScript specification algorithms. Internal slots are not object properties and they are not inherited. Depending upon the specific internal slot specification, such state may consist of values of any ECMAScript language type or of specific ECMAScript specification type values. Unless explicitly specified otherwise, internal slots are allocated as part of the process of creating an object and may not be dynamically added to an object. Unless specified otherwise, the initial value of an internal slot is the value *undefined*. Various algorithms within this specification create objects that have internal slots. However, the ECMAScript language provides no direct way to associate internal slots with an object.</p>
-        <p>All objects have an internal slot named [[PrivateFieldValues]], which is a List of PrivateField Records. This List represents the values of the private fields for the object. Initially, it is an empty List.</p>
+        <p>All objects have an internal slot named [[PrivateFields]], which is a List of PrivateField Records. This List represents the values of the private fields for the object. Initially, it is an empty List.</p>
         <p>All objects have an internal slot named [[PrivateBrands]], which is a List of ECMAScript values which are used for checking to see if an object supports a private method or accessor. The entries in the list correspond to the "original prototype" (or, in the case of static methods, the "original constructor") which contained the private method or accessor. Initially, it is an empty List.</p>
         <emu-note>
           <p>Although this specification uses logic of a [[PrivateBrands]] List which is held per-instance, the use of this list obeys certain invariants:</p>
@@ -4141,7 +4141,7 @@
           </tr>
           <tr>
             <td>
-              [[PrivateName]]
+              [[PrivateFieldName]]
             </td>
             <td>
               a Private Name
@@ -4238,7 +4238,7 @@
               Type
             </th>
             <th>
-              For which types is it present
+              Values of the [[Kind]] field for which it is present
             </th>
             <th>
               Description
@@ -5874,8 +5874,8 @@
       <emu-alg>
         1. Assert: _P_ is a Private Name.
         1. Assert: Type(_O_) is Object.
-        1. For each element _entry_ of _O_.[[PrivateFieldValues]], do
-          1. If _entry_.[[PrivateName]] is _P_, return _entry_.
+        1. For each element _entry_ of _O_.[[PrivateFields]], do
+          1. If _entry_.[[PrivateFieldName]] is _P_, return _entry_.
         1. Return ~empty~.
       </emu-alg>
     </emu-clause>
@@ -5887,7 +5887,7 @@
         1. Assert: Type(_O_) is Object.
         1. Let _entry_ be ! PrivateFieldFind(_P_, _O_).
         1. If _entry_ is not ~empty~, throw a *TypeError* exception.
-        1. Append PrivateField { [[PrivateName]]: _P_, [[PrivateFieldValue]]: _value_ } to _O_.[[PrivateFieldValues]].
+        1. Append PrivateField { [[PrivateFieldName]]: _P_, [[PrivateFieldValue]]: _value_ } to _O_.[[PrivateFields]].
       </emu-alg>
     </emu-clause>
 
