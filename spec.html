@@ -4279,7 +4279,7 @@
               [[Brand]]
             </td>
             <td>
-              an ECMAScript value
+              Object
             </td>
             <td>
               ~method~ or ~accessor~
@@ -22492,6 +22492,7 @@
         1. NOTE: No abnormal terminations occur after this algorithm step if the global object is an ordinary object. However, if the global object is a Proxy exotic object it may exhibit behaviours that cause abnormal terminations in some of the following steps.
         1. [id="step-globaldeclarationinstantiation-web-compat-insertion-point"] NOTE: Annex <emu-xref href="#sec-web-compat-globaldeclarationinstantiation"></emu-xref> adds additional steps at this point.
         1. Let _lexDeclarations_ be the LexicallyScopedDeclarations of _script_.
+        1. Let _privateEnv_ be NewDeclarativeEnvironment(*null*).
         1. For each element _d_ of _lexDeclarations_, do
           1. NOTE: Lexically declared names are only instantiated here but not initialized.
           1. For each element _dn_ of the BoundNames of _d_, do
@@ -22501,7 +22502,7 @@
               1. Perform ? _env_.CreateMutableBinding(_dn_, *false*).
         1. For each Parse Node _f_ of _functionsToInitialize_, do
           1. Let _fn_ be the sole element of the BoundNames of _f_.
-          1. Let _fo_ be InstantiateFunctionObject of _f_ with argument _env_.
+          1. Let _fo_ be InstantiateFunctionObject of _f_ with arguments _env_ and _privateEnv_.
           1. Perform ? _env_.CreateGlobalFunctionBinding(_fn_, _fo_, *false*).
         1. For each String _vn_ of _declaredVarNames_, do
           1. Perform ? _env_.CreateGlobalVarBinding(_vn_, *false*).
