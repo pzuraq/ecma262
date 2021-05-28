@@ -21310,13 +21310,13 @@
         1. If _kind_ is *"field"* or *"accessor"* or *"method"* or *"getter"*, then
           1. Let _steps_ be the steps of PrivateValueGetter as specified below.
           1. Let _length_ be the number of non-optional parameters of a PrivateValueGetter function as specified below.
-          1. Let _getter_ be ! CreateBuiltinFunction(_steps_, _length_, "", « [[PrivateStateKey]] »).
+          1. Let _getter_ be ! CreateBuiltinFunction(_steps_, _length_, "", &laquo; [[PrivateStateKey]] &raquo;).
           1. Set _getter_.[[PrivateStateKey]] to _name_.
           1. Perform ! CreateDataPropertyOrThrow(_accessObj_, *"get"*, _getter_).
         1. If _kind_ is *"field"* or *"accessor"* or *"setter"*, then
           1. Let _steps_ be the steps of PrivateValueSetter as specified below.
           1. Let _length_ be the number of non-optional parameters of a PrivateValueSetter function as specified below.
-          1. Let _setter_ be ! CreateBuiltinFunction(_steps_, _length_, "", « [[PrivateStateKey]] »).
+          1. Let _setter_ be ! CreateBuiltinFunction(_steps_, _length_, "", &laquo; [[PrivateStateKey]] &raquo;).
           1. Set _setter_.[[PrivateStateKey]] to _name_.
           1. Perform ! CreateDataPropertyOrThrow(_accessObj_, *"get"*, _setter_).
         1. Return _accessObj_.
@@ -21343,7 +21343,7 @@
       <emu-alg>
         1. Let _steps_ be the steps of SetDecoratorMetadata as specified below.
         1. Let _length_ be the number of non-optional parameters of a SetDecoratorMetadata function as specified below.
-        1. Let _defineMetadata_ be ! CreateBuiltinFunction(_steps_, _length_, "", « [[Kind]], [[MetadataList]], [[PropertyKey]] »).
+        1. Let _defineMetadata_ be ! CreateBuiltinFunction(_steps_, _length_, "", &laquo; [[Kind]], [[MetadataList]], [[PropertyKey]] &raquo;).
         1. Set _defineMetadata_.[[Kind]] to _kind_.
         1. Set _defineMetadata_.[[MetadataList]] to _metadataList_.
         1. Set _defineMetadata_.[[PropertyKey]] to _propertyKey_.
@@ -21384,7 +21384,7 @@
       <emu-alg>
         1. Let _steps_ be the steps of GetDecoratorMetadata as specified below.
         1. Let _length_ be the number of non-optional parameters of a GetDecoratorMetadata function as specified below.
-        1. Let _defineMetadata_ be ! CreateBuiltinFunction(_steps_, _length_, "", « [[Kind]], [[MetadataList]], [[PropertyKey]] »).
+        1. Let _defineMetadata_ be ! CreateBuiltinFunction(_steps_, _length_, "", &laquo; [[Kind]], [[MetadataList]], [[PropertyKey]] &raquo;).
         1. Set _defineMetadata_.[[Kind]] to _kind_.
         1. Set _defineMetadata_.[[MetadataList]] to _metadataList_.
         1. Set _defineMetadata_.[[PropertyKey]] to _propertyKey_.
@@ -21443,7 +21443,7 @@
               1. Append _meta_.[[Value]] to _privateMetadata_.
             1. Let _steps_ be the steps of GetPrivateMetadata as specified below.
             1. Let _length_ be the number of non-optional parameters of a GetDecoratorMetadata function as specified below.
-            1. Let _closure_ be ! CreateBuiltinFunction(_steps_, _length_, "", « [[OwnPrivateMetadata]] »).
+            1. Let _closure_ be ! CreateBuiltinFunction(_steps_, _length_, "", &laquo; [[OwnPrivateMetadata]] &raquo;).
             1. Set _closure_.[[OwnPrivateMetadata]] to _privateMetadata_.
             1. Let _desc_ be the PropertyDescriptor { [[Get]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }.
             1. Perform ? DefinePropertyOrThrow(_metadataObjForKey_, *"private"*, _desc_).
@@ -21925,7 +21925,7 @@
       <emu-alg>
         1. Let _steps_ be the steps of AutoAccessorGetter as specified below.
         1. Let _length_ be the number of non-optional parameters of an AutoAccessorGetter function as specified below.
-        1. Let _getter_ be ! CreateBuiltinFunction(_steps_, _length_, "", « [[PrivateStateKey]] »).
+        1. Let _getter_ be ! CreateBuiltinFunction(_steps_, _length_, "", &laquo; [[PrivateStateKey]] &raquo;).
         1. Set _getter_.[[PrivateStateKey]] to _privateStateName_.
         1. Perform MakeMethod(_getter_, _homeObject_).
         1. Perform SetFunctionName(_getter_, _name_, "get").
@@ -21945,7 +21945,7 @@
       <emu-alg>
         1. Let _steps_ be the steps of an AutoAccessorSetter function as specified below.
         1. Let _length_ be the number of non-optional parameters of an AutoAccessorSetter function as specified below.
-        1. Let _setter_ be ! CreateBuiltinFunction(_steps_, _length_, "", « [[PrivateStateKey]] »).
+        1. Let _setter_ be ! CreateBuiltinFunction(_steps_, _length_, "", &laquo; [[PrivateStateKey]] &raquo;).
         1. Set _setter_.[[PrivateStateKey]] to _privateStateName_.
         1. Perform MakeMethod(_setter_, _homeObject_).
         1. Perform SetFunctionName(_setter_, _name_, "set").
