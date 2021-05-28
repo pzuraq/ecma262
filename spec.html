@@ -11598,7 +11598,7 @@
 
     <emu-clause id="sec-definemethodproperty" aoid="DefineMethodProperty">
       <h1>DefineMethodProperty ( _key_, _homeObject_, _closure_, _enumerable_ [ , _decorators_ [ , _metadataList_ [ , _isStatic_ ] ] ] )</h1>
-      <p>The abstract operation DefineMethodProperty takes arguments _key_ (a property key or Private Name), _homeObject_ (an Object), _closure_ (a function object), and _enumerable_ (a Boolean), and optional arguments _decorators_ (a List of Records), _metadataList_ (an object), and _isStatic_ (a Boolean). It performs the following steps when called:</p>
+      <p>The abstract operation DefineMethodProperty takes arguments _key_ (a property key or Private Name), _homeObject_ (an Object), _closure_ (a function object), and _enumerable_ (a Boolean), and optional arguments _decorators_ (a List of Records), _metadataList_ (a List of Metadata Records), and _isStatic_ (a Boolean). It performs the following steps when called:</p>
       <emu-alg>
         1. Perform ! SetFunctionName(_closure_, _key_).
         1. Let _initializers_ be a new empty List.
@@ -21467,7 +21467,7 @@
     <emu-clause id="sec-createdecoratorcontextobject" aoid="CreateDecoratorContextObject">
       <h1>CreateDecoratorContextObject ( _kind_, _name_, _metadataList_ [ , _isStatic_ ] )</h1>
       <p>
-        The abstract operation CreateDecoratorContextObject takes arguments _kind_ (one of *"class"*, *"field"*, *"accessor"*, *"method"*, *"getter"*, *"setter"*), _name_ (a String, Symbol, or Private Name), and _metadataList_ (a Map whose keys are Symbols and whose values are Metadata Records), and optional argument _isStatic_ (a Boolean). It returns a the context object which is passed as the second argument to decorators of the given kind.
+        The abstract operation CreateDecoratorContextObject takes arguments _kind_ (one of *"class"*, *"field"*, *"accessor"*, *"method"*, *"getter"*, *"setter"*), _name_ (a String, Symbol, or Private Name), and _metadataList_ (a List of Metadata Records), and optional argument _isStatic_ (a Boolean). It returns a the context object which is passed as the second argument to decorators of the given kind.
       </p>
       <emu-alg>
         1. Let _contextObj_ be ! OrdinaryObjectCreate(%Object.prototype%).
