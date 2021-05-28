@@ -21325,13 +21325,13 @@
       <emu-alg>
         1. Let _o_ be the *this* value.
         1. Let _f_ be the active function object.
-        1. Return ? PrivateFieldGet(_f_.[[PrivateStateKey]], _o_).
+        1. Return ? PrivateGet(_f_.[[PrivateStateKey]], _o_).
       </emu-alg>
       <p>A PrivateValueSetter function is an anonymous built-in function with a [[PrivateStateKey]] internal slot. When a PrivateValueSetter function that expects no arguments is called it performs the following steps:</p>
       <emu-alg>
         1. Let _o_ be the *this* value.
         1. Let _f_ be the active function object.
-        1. Return ? PrivateFieldSet(_f_.[[PrivateStateKey]], _o_).
+        1. Return ? PrivateSet(_f_.[[PrivateStateKey]], _o_).
       </emu-alg>
     </emu-clause>
 
@@ -21935,7 +21935,7 @@
       <emu-alg>
         1. Let _o_ be the *this* value.
         1. Let _f_ be the active function object.
-        1. Return ? PrivateFieldGet(_f_.[[PrivateStateKey]], _o_).
+        1. Return ? PrivateGet(_f_.[[PrivateStateKey]], _o_).
       </emu-alg>
     </emu-clause>
 
@@ -21955,7 +21955,7 @@
       <emu-alg>
         1. Let _o_ be the *this* value.
         1. Let _f_ be the active function object.
-        1. Return ? PrivateFieldSet(_f_.[[PrivateStateKey]], _o_, _value_).
+        1. Return ? PrivateSet(_f_.[[PrivateStateKey]], _o_, _value_).
       </emu-alg>
     </emu-clause>
 
@@ -21973,7 +21973,7 @@
         1. Let _initializers_ be a new empty List.
         1. Let _finisherInitializers_ be a new empty List.
         1. If |Initializer_opt| is present, then
-          1. Let _initializer_ be ! CreateInitializerFunction(_name_, _homeObject_, |Initializer|).
+          1. Let _initializer_ be ! CreateFieldInitializerFunction(_name_, _homeObject_, |Initializer|).
           1. Append _initializer_ to _initializers_.
         1. For each element _decorator_ of _decorators_, do
           1. Let _context_ be CreateDecoratorContextObject(*"field"*, _name_, _metadataList_, _finisherInitializers_, _isStatic_).
@@ -21995,7 +21995,7 @@
         1. Let _initializers_ be a new empty List.
         1. Let _finisherInitializers_ be a new empty List.
         1. If |Initializer_opt| is present, then
-          1. Let _initializer_ be ! CreateInitializerFunction(_name_, _homeObject_, |Initializer|).
+          1. Let _initializer_ be ! CreateFieldInitializerFunction(_name_, _homeObject_, |Initializer|).
           1. Append _initializer_ to _initializers_.
         1. For each element _decorator_ of _decorators_, do
           1. Let _context_ be CreateDecoratorContextObject(*"accessor"*, _name_, _metadataList_, _finisherInitializers_, _isStatic_).
