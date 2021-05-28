@@ -21331,7 +21331,8 @@
       <emu-alg>
         1. Let _o_ be the *this* value.
         1. Let _f_ be the active function object.
-        1. Return ? PrivateSet(_f_.[[PrivateStateKey]], _o_, _value_).
+        1. Perform ? PrivateSet(_f_.[[PrivateStateKey]], _o_, _value_).
+        1. Return *undefined*.
       </emu-alg>
     </emu-clause>
 
@@ -21955,7 +21956,8 @@
       <emu-alg>
         1. Let _o_ be the *this* value.
         1. Let _f_ be the active function object.
-        1. Return ? PrivateSet(_f_.[[PrivateStateKey]], _o_, _value_).
+        1. Perform ? PrivateSet(_f_.[[PrivateStateKey]], _o_, _value_).
+        1. Return *undefined*.
       </emu-alg>
     </emu-clause>
 
