@@ -5960,7 +5960,7 @@
       <p>The abstract operation DefineElement takes arguments _receiver_ (an Object) and _elementRecord_ (a ClassElementDefinition Record). It performs the following steps when called:</p>
       <emu-alg>
         1. Let _initializers_ be _elementRecord_.[[Initializers]].
-        1. If _initializers_ is not an empty list, then
+        1. If _initializers_ is not an empty List, then
           1. If _elementRecord_.[[BackingStorageKey]] is present, let _fieldName_ be _elementRecord_.[[BackingStorageKey]].
           1. Else, let _fieldName_ be _elementRecord_.[[Key]].
           1. Let _initValue_ be *undefined*.
@@ -11598,7 +11598,7 @@
 
     <emu-clause id="sec-definemethodproperty" aoid="DefineMethodProperty">
       <h1>DefineMethodProperty ( _key_, _homeObject_, _closure_, _enumerable_ [ , _decorators_ [ , _metadataList_ [ , _isStatic_ ] ] ] )</h1>
-      <p>The abstract operation DefineMethodProperty takes arguments _key_ (a property key or Private Name), _homeObject_ (an Object), _closure_ (a function object), and _enumerable_ (a Boolean), and optional arguments _decorators_ (A list of records), _metadataList_ (an object), and _isStatic_ (a Boolean). It performs the following steps when called:</p>
+      <p>The abstract operation DefineMethodProperty takes arguments _key_ (a property key or Private Name), _homeObject_ (an Object), _closure_ (a function object), and _enumerable_ (a Boolean), and optional arguments _decorators_ (a List of Records), _metadataList_ (an object), and _isStatic_ (a Boolean). It performs the following steps when called:</p>
       <emu-alg>
         1. Perform ! SetFunctionName(_closure_, _key_).
         1. Let _initializers_ be a new empty List.
@@ -21338,7 +21338,7 @@
     <emu-clause id="sec-createsetmetadatafunction" aoid="CreateSetMetadataFunction">
       <h1>CreateSetMetadataFunction ( _kind_, _metadataList_, _propertyKey_ )</h1>
       <p>
-        The abstract operation CreateSetMetadataFunction takes arguments _kind_ (one of ~constructor~, ~public~, ~private~), _metadataList_ (a List of Metadata Records), and _propertyKey_ (a string, symbol, Private Name, or ~empty~). It returns a function that can be used to defined metadata on the passed in _metadataList_, and which is associated with the given _kind_ and, if provided, _propertyKey_.
+        The abstract operation CreateSetMetadataFunction takes arguments _kind_ (one of ~constructor~, ~public~, ~private~), _metadataList_ (a List of Metadata Records), and _propertyKey_ (a String, Symbol, Private Name, or ~empty~). It returns a function that can be used to defined metadata on the passed in _metadataList_, and which is associated with the given _kind_ and, if provided, _propertyKey_.
       </p>
       <emu-alg>
         1. Let _steps_ be the steps of SetDecoratorMetadata as specified below.
@@ -21379,7 +21379,7 @@
     <emu-clause id="sec-creategetmetadatafunction" aoid="CreateGetMetadataFunction">
       <h1>CreateGetMetadataFunction ( _kind_, _metadataList_, _propertyKey_ )</h1>
       <p>
-        The abstract operation CreateGetMetadataFunction takes arguments _kind_ (one of ~constructor~, ~public~, ~private~), _metadataList_ (a List of Metadata Records), and _propertyKey_ (a string, symbol, Private Name, or ~empty~). It returns a function that can be used to defined metadata on the passed in _metadataList_, and which is associated with the given _kind_ and, if provided, _propertyKey_.
+        The abstract operation CreateGetMetadataFunction takes arguments _kind_ (one of ~constructor~, ~public~, ~private~), _metadataList_ (a List of Metadata Records), and _propertyKey_ (a String, Symbol, Private Name, or ~empty~). It returns a function that can be used to defined metadata on the passed in _metadataList_, and which is associated with the given _kind_ and, if provided, _propertyKey_.
       </p>
       <emu-alg>
         1. Let _steps_ be the steps of GetDecoratorMetadata as specified below.
@@ -21416,7 +21416,7 @@
     <emu-clause id="sec-convertdecoratormetadatalisttoobject" aoid="ConvertDecoratorMetadataListToObject">
       <h1>ConvertDecoratorMetadataListToObject ( _metadataList_, _parentMetadataObj_ )</h1>
       <p>
-        The abstract operation ConvertDecoratorMetadataListToObject takes arguments _metadataList_ (a list of Metadata Records) and _parentMetadataObj_ (an object or *undefined*). It converts the list into an object, which it then returns.
+        The abstract operation ConvertDecoratorMetadataListToObject takes arguments _metadataList_ (a List of Metadata Records) and _parentMetadataObj_ (an Object or *undefined*). It converts the list into an object, which it then returns.
       </p>
       <emu-alg>
         1. If _parentMetadataObj_ is *undefined*, let _metadataObj_ be ! OrdinaryObjectCreate(%Object.prototype%).
@@ -21467,7 +21467,7 @@
     <emu-clause id="sec-createdecoratorcontextobject" aoid="CreateDecoratorContextObject">
       <h1>CreateDecoratorContextObject ( _kind_, _name_, _metadataList_ [ , _isStatic_ ] )</h1>
       <p>
-        The abstract operation CreateDecoratorContextObject takes arguments _kind_ (one of *"class"*, *"field"*, *"accessor"*, *"method"*, *"getter"*, *"setter"*), _name_ (a string, symbol, or Private Name), and _metadataList_ (a Map whose keys are Symbols and whose values are Metadata Records), and optional argument _isStatic_ (a boolean). It returns a the context object which is passed as the second argument to decorators of the given kind.
+        The abstract operation CreateDecoratorContextObject takes arguments _kind_ (one of *"class"*, *"field"*, *"accessor"*, *"method"*, *"getter"*, *"setter"*), _name_ (a String, Symbol, or Private Name), and _metadataList_ (a Map whose keys are Symbols and whose values are Metadata Records), and optional argument _isStatic_ (a Boolean). It returns a the context object which is passed as the second argument to decorators of the given kind.
       </p>
       <emu-alg>
         1. Let _contextObj_ be ! OrdinaryObjectCreate(%Object.prototype%).
@@ -21915,7 +21915,7 @@
         1. Let _initializer_ be ! OrdinaryFunctionCreate(%Function.prototype%, _sourceText_, _formalParameterList_, _Initializer_, ~non-lexical-this~, _scope_, _privateScope_).
         1. Perform MakeMethod(_initializer_, _homeObject_).
         1. Set _initializer_.[[ClassFieldInitializerName]] to _propName_.
-        1. return _initializer_.
+        1. Return _initializer_.
       </emu-alg>
     </emu-clause>
 
