@@ -21265,7 +21265,7 @@
       </emu-alg>
       <emu-grammar>Decorator : `@init:` DecoratorCallExpression</emu-grammar>
       <emu-alg>
-        1. Let _expr_ be the result of reparsing |DecoratorCallExpression| as a |CallMemberExpression|.
+        1. Let _expr_ be the |CallMemberExpression| that is covered by |DecoratorCallExpression|.
         1. Let _ref_ be the result of evaluating _expr_.
         1. Let _value_ be ? GetValue(_ref_).
         1. Return the Record { [[Decorator]]: _value_, [[IsInit]]: *true* }.
@@ -21279,7 +21279,7 @@
       </emu-alg>
       <emu-grammar>Decorator : `@` DecoratorCallExpression</emu-grammar>
       <emu-alg>
-        1. Let _expr_ be the result of reparsing |DecoratorCallExpression| as a |CallMemberExpression|.
+        1. Let _expr_ be the |CallMemberExpression| that is covered by |DecoratorCallExpression|.
         1. Let _ref_ be the result of evaluating _expr_.
         1. Let _value_ be ? GetValue(_ref_).
         1. Return the Record { [[Decorator]]: _value_, [[IsInit]]: *false* }.
@@ -21291,10 +21291,10 @@
       <emu-grammar>DecoratorList : DecoratorList? Decorator</emu-grammar>
       <emu-alg>
         1. If |DecoratorList| is present, then
-          1. Let _leftValue_ be ? DecoratorListEvaluation(|DecoratorList|).
+          1. Let _leftValue_ be ? DecoratorListEvaluation of |DecoratorList|.
         1. Else,
           1. Let _leftValue_ be a new empty List.
-        1. Let _rightValue_ be ? DecoratorEvaluation(|Decorator|).
+        1. Let _rightValue_ be ? DecoratorEvaluation of |Decorator|.
         1. Prepend _rightValue_ to _leftValue_.
         1. Return _leftValue_.
       </emu-alg>
@@ -21307,29 +21307,29 @@
       </p>
       <emu-alg>
         1. Let _accessObj_ be ! OrdinaryObjectCreate(%Object.prototype%).
-        1. If _kind_ is *"field"* or *"accessor"* or *"method"* or *"getter"*, then
-          1. Let _steps_ be the steps of PrivateValueGetter as specified below.
+        1. If _kind_ is *"field"*, *"accessor"*, *"method"*, or *"getter"*, then
+          1. Let _steps_ be the steps of a PrivateValueGetter function as specified below.
           1. Let _length_ be the number of non-optional parameters of a PrivateValueGetter function as specified below.
-          1. Let _getter_ be ! CreateBuiltinFunction(_steps_, _length_, "", &laquo; [[PrivateStateKey]] &raquo;).
+          1. Let _getter_ be ! CreateBuiltinFunction(_steps_, _length_, *""*, &laquo; [[PrivateStateKey]] &raquo;).
           1. Set _getter_.[[PrivateStateKey]] to _name_.
           1. Perform ! CreateDataPropertyOrThrow(_accessObj_, *"get"*, _getter_).
-        1. If _kind_ is *"field"* or *"accessor"* or *"setter"*, then
-          1. Let _steps_ be the steps of PrivateValueSetter as specified below.
+        1. If _kind_ is *"field"*, *"accessor"*, or *"setter"*, then
+          1. Let _steps_ be the steps of a PrivateValueSetter function as specified below.
           1. Let _length_ be the number of non-optional parameters of a PrivateValueSetter function as specified below.
-          1. Let _setter_ be ! CreateBuiltinFunction(_steps_, _length_, "", &laquo; [[PrivateStateKey]] &raquo;).
+          1. Let _setter_ be ! CreateBuiltinFunction(_steps_, _length_, *""*, &laquo; [[PrivateStateKey]] &raquo;).
           1. Set _setter_.[[PrivateStateKey]] to _name_.
           1. Perform ! CreateDataPropertyOrThrow(_accessObj_, *"get"*, _setter_).
         1. Return _accessObj_.
       </emu-alg>
       <p>A PrivateValueGetter function is an anonymous built-in function with a [[PrivateStateKey]] internal slot. When a PrivateValueGetter function that expects no arguments is called it performs the following steps:</p>
       <emu-alg>
-        1. Let _o_ be the `this` value.
+        1. Let _o_ be the *this* value.
         1. Let _f_ be the active function object.
         1. Return ? PrivateFieldGet(_f_.[[PrivateStateKey]], _o_).
       </emu-alg>
       <p>A PrivateValueSetter function is an anonymous built-in function with a [[PrivateStateKey]] internal slot. When a PrivateValueSetter function that expects no arguments is called it performs the following steps:</p>
       <emu-alg>
-        1. Let _o_ be the `this` value.
+        1. Let _o_ be the *this* value.
         1. Let _f_ be the active function object.
         1. Return ? PrivateFieldSet(_f_.[[PrivateStateKey]], _o_).
       </emu-alg>
@@ -21341,9 +21341,9 @@
         The abstract operation CreateSetMetadataFunction takes arguments _kind_ (one of ~constructor~, ~public~, ~private~), _metadataList_ (a List of Metadata Records), and _propertyKey_ (a String, Symbol, Private Name, or ~empty~). It returns a function that can be used to defined metadata on the passed in _metadataList_, and which is associated with the given _kind_ and, if provided, _propertyKey_.
       </p>
       <emu-alg>
-        1. Let _steps_ be the steps of SetDecoratorMetadata as specified below.
+        1. Let _steps_ be the steps of a SetDecoratorMetadata function as specified below.
         1. Let _length_ be the number of non-optional parameters of a SetDecoratorMetadata function as specified below.
-        1. Let _defineMetadata_ be ! CreateBuiltinFunction(_steps_, _length_, "", &laquo; [[Kind]], [[MetadataList]], [[PropertyKey]] &raquo;).
+        1. Let _defineMetadata_ be ! CreateBuiltinFunction(_steps_, _length_, *""*, &laquo; [[Kind]], [[MetadataList]], [[PropertyKey]] &raquo;).
         1. Set _defineMetadata_.[[Kind]] to _kind_.
         1. Set _defineMetadata_.[[MetadataList]] to _metadataList_.
         1. Set _defineMetadata_.[[PropertyKey]] to _propertyKey_.
@@ -21358,19 +21358,19 @@
         1. Let _propertyKey_ be _f_.[[PropertyKey]].
         1. Let _metadataForKey_ be the element of _metadataList_ whose [[Key]] is the same as _metadataKey_.
         1. If _metadataForKey_ does not exist, then
-          1. Set _metadataForKey_ to be a new Metadata Record { [[Key]]: _metadataKey_, [[Constructor]] ~empty~, [[Public]]: &laquo; &raquo;, [[Private]]: &laquo; &raquo; }.
+          1. Set _metadataForKey_ to a new Metadata Record { [[Key]]: _metadataKey_, [[Constructor]]: ~empty~, [[Public]]: &laquo; &raquo;, [[Private]]: &laquo; &raquo; }.
           1. Append _metadataForKey_ to _metadataList_.
         1. If _kind_ is ~constructor~, set _metadataForKey_.[[Constructor]] to _value_.
         1. If _kind_ is ~public~, then
           1. Let _publicMetadata_ be the element of _metadataForKey_.[[Public]] whose [[Key]] is the same as _propertyKey_.
           1. If _publicMetadata_ does not exist, then
-            1. Set _publicMetadata_ to be a new Record { [[Key]]: _propertyKey_, [[Value]]: _value_ }.
+            1. Set _publicMetadata_ to the Record { [[Key]]: _propertyKey_, [[Value]]: _value_ }.
             1. Append _publicMetadata_ to _metadataForKey_.[[Public]].
           1. Else, set _publicMetadata_.[[Value]] to _value_.
         1. If _kind_ is ~private~, then
           1. Let _privateMetadata_ be the element of _metadataForKey_.[[Private]] whose [[Key]] is the same as _propertyKey_.
           1. If _privateMetadata_ does not exist, then
-            1. Set _privateMetadata_ to be a new Record { [[Key]]: _propertyKey_, [[Value]]: _value_ }.
+            1. Set _privateMetadata_ to the Record { [[Key]]: _propertyKey_, [[Value]]: _value_ }.
             1. Append _privateMetadata_ to _metadataForKey_.[[Private]].
           1. Else, set _privateMetadata_.[[Value]] to _value_.
       </emu-alg>
@@ -21382,9 +21382,9 @@
         The abstract operation CreateGetMetadataFunction takes arguments _kind_ (one of ~constructor~, ~public~, ~private~), _metadataList_ (a List of Metadata Records), and _propertyKey_ (a String, Symbol, Private Name, or ~empty~). It returns a function that can be used to defined metadata on the passed in _metadataList_, and which is associated with the given _kind_ and, if provided, _propertyKey_.
       </p>
       <emu-alg>
-        1. Let _steps_ be the steps of GetDecoratorMetadata as specified below.
+        1. Let _steps_ be the steps of a GetDecoratorMetadata function as specified below.
         1. Let _length_ be the number of non-optional parameters of a GetDecoratorMetadata function as specified below.
-        1. Let _defineMetadata_ be ! CreateBuiltinFunction(_steps_, _length_, "", &laquo; [[Kind]], [[MetadataList]], [[PropertyKey]] &raquo;).
+        1. Let _defineMetadata_ be ! CreateBuiltinFunction(_steps_, _length_, *""*, &laquo; [[Kind]], [[MetadataList]], [[PropertyKey]] &raquo;).
         1. Set _defineMetadata_.[[Kind]] to _kind_.
         1. Set _defineMetadata_.[[MetadataList]] to _metadataList_.
         1. Set _defineMetadata_.[[PropertyKey]] to _propertyKey_.
@@ -21427,23 +21427,23 @@
           1. Else, let _parentMetadataObjForKey_ be *undefined*.
           1. If _parentMetadataObjForKey_ is not *undefined*, let _metadataObj_ be ! OrdinaryObjectCreate(_parentMetadataObjForKey_).
           1. Else, let _metadataObjForKey_ be ! OrdinaryObjectCreate(%Object.prototype%).
-          1. If _metadataRecord_.[[Constructor]] is not ~empty~, perform ! CreateDataPropertyOrThrow(_metadataObjForKey_, *"constructor"* , _metadataRecord_.[[Constructor]]).
+          1. If _metadataRecord_.[[Constructor]] is not ~empty~, perform ! CreateDataPropertyOrThrow(_metadataObjForKey_, *"constructor"*, _metadataRecord_.[[Constructor]]).
           1. If _metadataRecord_.[[Public]] is not an empty List, then
             1. Let _parentPublicMetadata_ be ? Get(_parentMetadataObjForKey_, *"public"*).
             1. If _parentPublicMetadata_ is *undefined*, set _parentPublicMetadata_ to %Object.prototype%.
             1. Let _publicMetadata_ be ! OrdinaryObjectCreate(_parentPublicMetadata_).
-            1. For each element _meta_ in _metadataRecord_.[[Public]], do
+            1. For each element _meta_ of _metadataRecord_.[[Public]], do
               1. Let _key_ be _meta_.[[Key]].
               1. Let _value_ be _meta_.[[Value]].
-              1. Perform ! CreateDataPropertyOrThrow(_publicMetadata_, _key_ , _value_).
-            1. Perform ! CreateDataPropertyOrThrow(_metadataObjForKey_, *"public"* , _publicMetadata_).
+              1. Perform ! CreateDataPropertyOrThrow(_publicMetadata_, _key_, _value_).
+            1. Perform ! CreateDataPropertyOrThrow(_metadataObjForKey_, *"public"*, _publicMetadata_).
           1. If _metadataRecord_.[[Private]] is not an empty List, then
             1. Let _privateMetadata_ be a new empty List.
-            1. For each element _meta_ in _metadataRecord_.[[Private]], do
+            1. For each element _meta_ of _metadataRecord_.[[Private]], do
               1. Append _meta_.[[Value]] to _privateMetadata_.
-            1. Let _steps_ be the steps of GetPrivateMetadata as specified below.
+            1. Let _steps_ be the steps of a GetPrivateMetadata function as specified below.
             1. Let _length_ be the number of non-optional parameters of a GetDecoratorMetadata function as specified below.
-            1. Let _closure_ be ! CreateBuiltinFunction(_steps_, _length_, "", &laquo; [[OwnPrivateMetadata]] &raquo;).
+            1. Let _closure_ be ! CreateBuiltinFunction(_steps_, _length_, *""*, &laquo; [[OwnPrivateMetadata]] &raquo;).
             1. Set _closure_.[[OwnPrivateMetadata]] to _privateMetadata_.
             1. Let _desc_ be the PropertyDescriptor { [[Get]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }.
             1. Perform ? DefinePropertyOrThrow(_metadataObjForKey_, *"private"*, _desc_).
@@ -21452,14 +21452,14 @@
       </emu-alg>
       <p>A GetPrivateMetadata function is an anonymous built-in function with [[OwnPrivateMetadata]] internal slots. When a GetPrivateMetadata function is called the following steps are taken:</p>
       <emu-alg>
-        1. Let _o_ be the `this` value.
+        1. Let _o_ be the *this* value.
         1. Let _f_ be the active function object.
         1. Let _ownMetadata_ be _f_.[[OwnPrivateMetadata]].
         1. Let _prototype_ be ? _o_.[[GetPrototypeOf]]().
         1. Let _parentMetadata_ be ? Get(_prototype_, *"private"*).
         1. If _parentMetadata_ is *undefined*, let _metadataList_ be a new empty List.
         1. Else, let _metadataList_ be ? CreateListFromArrayLike(_parentMetadata_).
-        1. Append the contents of _ownMetadata_ to _metadataList_.
+        1. Append the elements of _ownMetadata_ to _metadataList_.
         1. Return ! CreateArrayFromList(_metadataList_).
       </emu-alg>
     </emu-clause>
@@ -21471,11 +21471,11 @@
       </p>
       <emu-alg>
         1. Let _contextObj_ be ! OrdinaryObjectCreate(%Object.prototype%).
-        1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"kind"* , _kind_).
+        1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"kind"*, _kind_).
         1. If _name_ is a Private Name, then
           1. Assert: _kind_ is not *"class"*.
-          1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"name"* , _name_.[[Description]]).
-          1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"isPrivate"* , *true*).
+          1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"name"*, _name_.[[Description]]).
+          1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"isPrivate"*, *true*).
           1. Let _access_ be ! CreateDecoratorAccessObject(~method~, _name_).
           1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"access"*, _access_).
           1. Let _setMetadata_ be ! CreateSetMetadataFunction(~private~, _metadataList_, ~empty~).
@@ -21483,19 +21483,19 @@
           1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"setMetadata"*, _setMetadata_).
           1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"getMetadata"*, _getMetadata_).
         1. Else,
-          1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"name"* , _name_).
+          1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"name"*, _name_).
           1. If _kind_ is *"class"*, then
             1. Let _setMetadata_ be ! CreateSetMetadataFunction(~constructor~, _metadataList_, ~empty~).
             1. Let _getMetadata_ be ! CreateGetMetadataFunction(~constructor~, _metadataList_, ~empty~).
             1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"setMetadata"*, _setMetadata_).
             1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"getMetadata"*, _getMetadata_).
           1. Else,
-            1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"isPrivate"* , *false*).
+            1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"isPrivate"*, *false*).
             1. Let _setMetadata_ be ! CreateSetMetadataFunction(~public~, _metadataList_, _name_).
             1. Let _getMetadata_ be ! CreateGetMetadataFunction(~public~, _metadataList_, _name_).
             1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"setMetadata"*, _setMetadata_).
             1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"getMetadata"*, _getMetadata_).
-        1. If _isStatic_ is present, perform ! CreateDataPropertyOrThrow(_contextObj_, *"isStatic"* , _isStatic_).
+        1. If _isStatic_ is present, perform ! CreateDataPropertyOrThrow(_contextObj_, *"isStatic"*, _isStatic_).
         1. Return _contextObj_.
       </emu-alg>
     </emu-clause>
@@ -21923,17 +21923,17 @@
       <h1>MakeAutoAccessorGetter ( _name_, _privateStateName_, _homeObject_ )</h1>
       <p>The abstract operation MakeAutoAccessorGetter takes arguments _name_, _privateStateName_, and _homeObject_. It creates a built-in function object that when executed returns the value stored in the private field associated with _privateStateName_ on the current `this` value of the function call. It performs the following steps when called:</p>
       <emu-alg>
-        1. Let _steps_ be the steps of AutoAccessorGetter as specified below.
+        1. Let _steps_ be the steps of an AutoAccessorGetter function as specified below.
         1. Let _length_ be the number of non-optional parameters of an AutoAccessorGetter function as specified below.
-        1. Let _getter_ be ! CreateBuiltinFunction(_steps_, _length_, "", &laquo; [[PrivateStateKey]] &raquo;).
+        1. Let _getter_ be ! CreateBuiltinFunction(_steps_, _length_, *""*, &laquo; [[PrivateStateKey]] &raquo;).
         1. Set _getter_.[[PrivateStateKey]] to _privateStateName_.
         1. Perform MakeMethod(_getter_, _homeObject_).
-        1. Perform SetFunctionName(_getter_, _name_, "get").
+        1. Perform SetFunctionName(_getter_, _name_, *"get"*).
         1. Return _getter_.
       </emu-alg>
       <p>An AutoAccessorGetter function is an anonymous built-in function with a [[PrivateStateKey]] internal slot. When an AutoAccessorGetter function that expects no arguments is called it performs the following steps:</p>
       <emu-alg>
-        1. Let _o_ be the `this` value.
+        1. Let _o_ be the *this* value.
         1. Let _f_ be the active function object.
         1. Return ? PrivateFieldGet(_f_.[[PrivateStateKey]], _o_).
       </emu-alg>
@@ -21945,15 +21945,15 @@
       <emu-alg>
         1. Let _steps_ be the steps of an AutoAccessorSetter function as specified below.
         1. Let _length_ be the number of non-optional parameters of an AutoAccessorSetter function as specified below.
-        1. Let _setter_ be ! CreateBuiltinFunction(_steps_, _length_, "", &laquo; [[PrivateStateKey]] &raquo;).
+        1. Let _setter_ be ! CreateBuiltinFunction(_steps_, _length_, *""*, &laquo; [[PrivateStateKey]] &raquo;).
         1. Set _setter_.[[PrivateStateKey]] to _privateStateName_.
         1. Perform MakeMethod(_setter_, _homeObject_).
-        1. Perform SetFunctionName(_setter_, _name_, "set").
+        1. Perform SetFunctionName(_setter_, _name_, *"set"*).
         1. Return _setter_.
       </emu-alg>
       <p>An AutoAccessorSetter function is an anonymous built-in function with a [[PrivateStateKey]] internal slot. When an AutoAccessorSetter function is called with argument _value_ it performs the following steps:</p>
       <emu-alg>
-        1. Let _o_ be the this value.
+        1. Let _o_ be the *this* value.
         1. Let _f_ be the active function object.
         1. Return ? PrivateFieldSet(_f_.[[PrivateStateKey]], _o_, _value_).
       </emu-alg>
@@ -21998,10 +21998,10 @@
           1. Let _initializer_ be ! CreateInitializerFunction(_name_, _homeObject_, |Initializer|).
           1. Append _initializer_ to _initializers_.
         1. For each element _decorator_ of _decorators_, do
-          1. Let _context_ be CreateDecoratorContextObject(*"accessor"*, _name_, _metadataList_, _finisherInitializers_ _isStatic_).
+          1. Let _context_ be CreateDecoratorContextObject(*"accessor"*, _name_, _metadataList_, _finisherInitializers_, _isStatic_).
           1. Let _accessor_ be ! OrdinaryObjectCreate(%Object.prototype%).
-          1. Perform ! CreateDataPropertyOrThrow(_accessor_, *"get"* , _getter_).
-          1. Perform ! CreateDataPropertyOrThrow(_accessor_, *"set"* , _setter_).
+          1. Perform ! CreateDataPropertyOrThrow(_accessor_, *"get"*, _getter_).
+          1. Perform ! CreateDataPropertyOrThrow(_accessor_, *"set"*, _setter_).
           1. Let _output_ be ? Call(_decorator_.[[Decorator]], *undefined*, &laquo; _accessor_, _context_ &raquo;).
           1. Let _newGetter_ be ? Get(_output_, *"get"*).
           1. If IsCallable(_newGetter_) is *true*, set _getter_ to _newGetter_.
@@ -22139,7 +22139,7 @@
         1. Let _instanceMetadataList_ be a new empty List.
         1. For each |ClassElement| _e_ of _elements_, do
           1. If IsStatic of _e_ is *false*, then
-            1. Let _element_ be ClassElementEvaluation of _e_ with arguments _proto_, *false*, _instanceMetadataList_.
+            1. Let _element_ be ClassElementEvaluation of _e_ with arguments _proto_, *false*, and _instanceMetadataList_.
           1. Else,
             1. Let _element_ be ClassElementEvaluation of _e_ with arguments _F_, *false*, and _staticMetadataList_.
           1. If _element_ is an abrupt completion, then
