@@ -11605,10 +11605,10 @@
         1. If _decorators_ is present, then
           1. Assert: _metadataList_ and _isStatic_ are present.
           1. For each element _decorator_ of _decorators_, do
-            1. Let _context_ be CreateDecoratorContextObject(*"method"*, _propKey_, _metadataList_, _initializers_, _isStatic_).
+            1. Let _context_ be CreateDecoratorContextObject(*"method"*, _key_, _metadataList_, _initializers_, _isStatic_).
             1. Let _newMethod_ be ? Call(_decorator_.[[Decorator]], *undefined*, &laquo; _closure_, _context_ &raquo;).
             1. If IsCallable(_newMethod_) is *true*, then
-              1. Perform MakeMethod(_newMethod_, _object_).
+              1. Perform MakeMethod(_newMethod_, _homeObject_).
               1. Perform ! SetFunctionName(_closure_, _key_).
               1. Set _closure_ to _newMethod_.
             1. Else if _newMethod_ is not *undefined*, throw a *TypeError* exception.
@@ -21448,7 +21448,7 @@
             1. Let _desc_ be the PropertyDescriptor { [[Get]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }.
             1. Perform ? DefinePropertyOrThrow(_metadataObjForKey_, *"private"*, _desc_).
           1. Perform ! CreateDataPropertyOrThrow(_metadataObj_, _key_, _metadataObjForKey_).
-        1. Return _metadata_.
+        1. Return _metadataObj_.
       </emu-alg>
       <p>A GetPrivateMetadata function is an anonymous built-in function with [[OwnPrivateMetadata]] internal slots. When a GetPrivateMetadata function is called the following steps are taken:</p>
       <emu-alg>
@@ -21980,7 +21980,7 @@
           1. Let _initializer_ be ? Call(_decorator_.[[Decorator]], *undefined*, &laquo; *undefined*, _context_ &raquo;).
           1. If IsCallable(_initializer_) is *true*, append _initializer_ to _initializers_.
           1. Else if _initializer_ is not *undefined*, throw a *TypeError* exception.
-        1. Return ClassElementDefinition { [[Key]]: _propKey_, [[Kind]]: ~field~, [[Initializers]]: _initializers_, [[FinisherInitializers]]: _finisherInitializers_ }.
+        1. Return ClassElementDefinition { [[Key]]: _name_, [[Kind]]: ~field~, [[Initializers]]: _initializers_, [[FinisherInitializers]]: _finisherInitializers_ }.
       </emu-alg>
       <emu-grammar>
         FieldDefinition : `accessor` ClassElementName Initializer?
@@ -22180,7 +22180,7 @@
         1. For each element _decorator_ of _decorators_, do
           1. Let _context_ be CreateDecoratorContextObject(*"class"*, _className_, _initializers_, _staticMetadataList_).
           1. Let _newF_ be ? Call(_decorator_.[[Decorator]], *undefined*, &laquo; _F_, _context_ &raquo;).
-          1. If IsCallable(_newMethod_) is *true*, then
+          1. If IsCallable(_newF_) is *true*, then
             1. Set _F_ to _newF_.
           1. Else if _newF_ is not *undefined*, throw a *TypeError* exception.
         1. For each element _elementRecord_ of _staticElements_, do
