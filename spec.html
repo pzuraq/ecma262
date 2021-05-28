@@ -22181,7 +22181,7 @@
           1. Perform ! PrivateMethodOrAccessorAdd(_method_, _F_).
         1. Let _initializers_ be a new empty List.
         1. For each element _decorator_ of _decorators_, do
-          1. Let _context_ be CreateDecoratorContextObject(*"class"*, _className_, _initializers_, _staticMetadataList_).
+          1. Let _context_ be CreateDecoratorContextObject(*"class"*, _className_, _staticMetadataList_, _initializers_).
           1. Let _newF_ be ? Call(_decorator_.[[Decorator]], *undefined*, &laquo; _F_, _context_ &raquo;).
           1. If IsCallable(_newF_) is *true*, then
             1. Set _F_ to _newF_.
