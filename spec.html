@@ -21327,11 +21327,11 @@
         1. Let _f_ be the active function object.
         1. Return ? PrivateGet(_f_.[[PrivateStateKey]], _o_).
       </emu-alg>
-      <p>A PrivateValueSetter function is an anonymous built-in function with a [[PrivateStateKey]] internal slot. When a PrivateValueSetter function that expects no arguments is called it performs the following steps:</p>
+      <p>A PrivateValueSetter function is an anonymous built-in function with a [[PrivateStateKey]] internal slot. When a PrivateValueSetter function is called with argument _value_ it performs the following steps:</p>
       <emu-alg>
         1. Let _o_ be the *this* value.
         1. Let _f_ be the active function object.
-        1. Return ? PrivateSet(_f_.[[PrivateStateKey]], _o_).
+        1. Return ? PrivateSet(_f_.[[PrivateStateKey]], _o_, _value_).
       </emu-alg>
     </emu-clause>
 
