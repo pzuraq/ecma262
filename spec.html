@@ -21425,7 +21425,7 @@
           1. Let _key_ be _metadataRecord_.[[Key]].
           1. If _parentMetadataObj_ is not *undefined*, let _parentMetadataObjForKey_ be ? Get(_parentMetadataObj_, _key_).
           1. Else, let _parentMetadataObjForKey_ be *undefined*.
-          1. If _parentMetadataObjForKey_ is not *undefined*, let _metadataObj_ be ! OrdinaryObjectCreate(_parentMetadataObjForKey_).
+          1. If _parentMetadataObjForKey_ is not *undefined*, let _metadataObjForKey_ be ! OrdinaryObjectCreate(_parentMetadataObjForKey_).
           1. Else, let _metadataObjForKey_ be ! OrdinaryObjectCreate(%Object.prototype%).
           1. If _metadataRecord_.[[Constructor]] is not ~empty~, perform ! CreateDataPropertyOrThrow(_metadataObjForKey_, *"constructor"*, _metadataRecord_.[[Constructor]]).
           1. If _metadataRecord_.[[Public]] is not an empty List, then
