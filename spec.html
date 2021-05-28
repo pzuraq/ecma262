@@ -8063,7 +8063,7 @@
       <emu-grammar>ClassExpression : DecoratorList? `class` ClassTail</emu-grammar>
       <emu-alg>
         1. If |DecoratorList_opt| is present, then
-          1. Let _decorators_ be DecoratorListEvaluation of |DecoratorList|.
+          1. Let _decorators_ be ? DecoratorListEvaluation of |DecoratorList|.
         1. Else, let _decorators_ be a new empty List.
         1. Let _value_ be the result of ClassDefinitionEvaluation of |ClassTail| with arguments *undefined*, _name_, and _decorators_.
         1. ReturnIfAbrupt(_value_).
@@ -21455,12 +21455,12 @@
         1. Let _o_ be the `this` value.
         1. Let _f_ be the active function object.
         1. Let _ownMetadata_ be _f_.[[OwnPrivateMetadata]].
-        1. Let _prototype_ be _o_.[[GetPrototypeOf]]().
+        1. Let _prototype_ be ? _o_.[[GetPrototypeOf]]().
         1. Let _parentMetadata_ be ? Get(_prototype_, *"private"*).
         1. If _parentMetadata_ is *undefined*, let _metadataList_ be a new empty List.
         1. Else, let _metadataList_ be ? CreateListFromArrayLike(_parentMetadata_).
         1. Append the contents of _ownMetadata_ to _metadataList_.
-        1. Return ? CreateArrayFromList(_metadataList_).
+        1. Return ! CreateArrayFromList(_metadataList_).
       </emu-alg>
     </emu-clause>
 
@@ -21973,7 +21973,7 @@
         1. Let _initializers_ be a new empty List.
         1. Let _finisherInitializers_ be a new empty List.
         1. If |Initializer_opt| is present, then
-          1. Let _initializer_ be ? CreateInitializerFunction(_name_, _homeObject_, |Initializer|).
+          1. Let _initializer_ be ! CreateInitializerFunction(_name_, _homeObject_, |Initializer|).
           1. Append _initializer_ to _initializers_.
         1. For each element _decorator_ of _decorators_, do
           1. Let _context_ be CreateDecoratorContextObject(*"field"*, _name_, _metadataList_, _finisherInitializers_, _isStatic_).
@@ -21995,7 +21995,7 @@
         1. Let _initializers_ be a new empty List.
         1. Let _finisherInitializers_ be a new empty List.
         1. If |Initializer_opt| is present, then
-          1. Let _initializer_ be ? CreateInitializerFunction(_name_, _homeObject_, |Initializer|).
+          1. Let _initializer_ be ! CreateInitializerFunction(_name_, _homeObject_, |Initializer|).
           1. Append _initializer_ to _initializers_.
         1. For each element _decorator_ of _decorators_, do
           1. Let _context_ be CreateDecoratorContextObject(*"accessor"*, _name_, _metadataList_, _finisherInitializers_ _isStatic_).
@@ -22031,7 +22031,7 @@
       </emu-grammar>
       <emu-alg>
         1. If |DecoratorList_opt| is present, then
-          1. Let _decorators_ be DecoratorListEvaluation of |DecoratorList|.
+          1. Let _decorators_ be ? DecoratorListEvaluation of |DecoratorList|.
         1. Else, let _decorators_ be a new empty List.
         1. Return ClassFieldDefinitionEvaluation of |FieldDefinition| with arguments _object_, _decorators_, _metadataList_, and *false*.
       </emu-alg>
@@ -22041,7 +22041,7 @@
       </emu-grammar>
       <emu-alg>
         1. If |DecoratorList_opt| is present, then
-          1. Let _decorators_ be DecoratorListEvaluation of |DecoratorList|.
+          1. Let _decorators_ be ? DecoratorListEvaluation of |DecoratorList|.
         1. Else, let _decorators_ be a new empty List.
         1. Return ClassFieldDefinitionEvaluation of |FieldDefinition| with arguments _object_, _decorators_, _metadataList_, and *true*.
       </emu-alg>
@@ -22051,7 +22051,7 @@
       </emu-grammar>
       <emu-alg>
         1. If |DecoratorList_opt| is present, then
-          1. Let _decorators_ be DecoratorListEvaluation of |DecoratorList|.
+          1. Let _decorators_ be ? DecoratorListEvaluation of |DecoratorList|.
         1. Else, let _decorators_ be a new empty List.
         1. Return MethodDefinitionEvaluation of |MethodDefinition| with arguments _object_, _enumerable_, _decorators_, _metadataList_, and *false*.
       </emu-alg>
@@ -22061,7 +22061,7 @@
       </emu-grammar>
       <emu-alg>
         1. If |DecoratorList_opt| is present, then
-          1. Let _decorators_ be DecoratorListEvaluation of |DecoratorList|.
+          1. Let _decorators_ be ? DecoratorListEvaluation of |DecoratorList|.
         1. Else, let _decorators_ be a new empty List.
         1. Return MethodDefinitionEvaluation of |MethodDefinition| with arguments _object_, _enumerable_, _decorators_, _metadataList_, and *true*.
       </emu-alg>
@@ -22221,7 +22221,7 @@
       <emu-alg>
         1. Let _className_ be StringValue of |BindingIdentifier|.
         1. If |DecoratorList_opt| is present, then
-          1. Let _decorators_ be DecoratorListEvaluation of |DecoratorList|.
+          1. Let _decorators_ be ? DecoratorListEvaluation of |DecoratorList|.
         1. Else, let _decorators_ be a new empty List.
         1. Let _value_ be ? ClassDefinitionEvaluation of |ClassTail| with arguments _className_, _className_, and _decorators_.
         1. Set _value_.[[SourceText]] to the source text matched by |ClassDeclaration|.
@@ -22232,7 +22232,7 @@
       <emu-grammar>ClassDeclaration : DecoratorList? `class` ClassTail</emu-grammar>
       <emu-alg>
         1. If |DecoratorList_opt| is present, then
-          1. Let _decorators_ be DecoratorListEvaluation of |DecoratorList|.
+          1. Let _decorators_ be ? DecoratorListEvaluation of |DecoratorList|.
         1. Else, let _decorators_ be a new empty List.
         1. Let _value_ be ? ClassDefinitionEvaluation of |ClassTail| with arguments *undefined*, *"default"*, and _decorators_.
         1. Set _value_.[[SourceText]] to the source text matched by |ClassDeclaration|.
@@ -22256,7 +22256,7 @@
       <emu-grammar>ClassExpression : DecoratorList? `class` ClassTail</emu-grammar>
       <emu-alg>
         1. If |DecoratorList_opt| is present, then
-          1. Let _decorators_ be DecoratorListEvaluation of |DecoratorList|.
+          1. Let _decorators_ be ? DecoratorListEvaluation of |DecoratorList|.
         1. Else, let _decorators_ be a new empty List.
         1. Let _value_ be ? ClassDefinitionEvaluation of |ClassTail| with arguments *undefined*, *""*, and _decorators_.
         1. Set _value_.[[SourceText]] to the source text matched by |ClassExpression|.
@@ -22266,7 +22266,7 @@
       <emu-alg>
         1. Let _className_ be StringValue of |BindingIdentifier|.
         1. If |DecoratorList_opt| is present, then
-          1. Let _decorators_ be DecoratorListEvaluation of |DecoratorList|.
+          1. Let _decorators_ be ? DecoratorListEvaluation of |DecoratorList|.
         1. Else, let _decorators_ be a new empty List.
         1. Let _value_ be ? ClassDefinitionEvaluation of |ClassTail| with arguments _className_, _className_, and _decorators_.
         1. Set _value_.[[SourceText]] to the source text matched by |ClassExpression|.
