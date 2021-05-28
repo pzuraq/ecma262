@@ -21254,7 +21254,7 @@
         DecoratorMemberExpression[?Yield, ?Await] Arguments[?Yield, ?Await]
     </emu-grammar>
 
-    <emu-clause id="sec-decorator-runtime-semantics-decoratorevaluation" aoid="DecoratorEvaluation">
+    <emu-clause id="sec-decoratorevaluation" type="sdo" aoid="DecoratorEvaluation">
       <h1>Runtime Semantics: DecoratorEvaluation</h1>
       <emu-grammar>Decorator : `@init:` DecoratorMemberExpression</emu-grammar>
       <emu-alg>
@@ -21286,7 +21286,7 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-decorator-runtime-semantics-decoratorlistevaluation" aoid="DecoratorListEvaluation">
+    <emu-clause id="sec-decoratorlistevaluation" type="sdo" aoid="DecoratorListEvaluation">
       <h1>Runtime Semantics: DecoratorListEvaluation</h1>
       <emu-grammar>DecoratorList : DecoratorList? Decorator</emu-grammar>
       <emu-alg>
@@ -21300,7 +21300,7 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-decorator-createdecoratoraccessobject" aoid="CreateDecoratorAccessObject">
+    <emu-clause id="sec-createdecoratoraccessobject" aoid="CreateDecoratorAccessObject">
       <h1>CreateDecoratorAccessObject ( _kind_, _name_ )</h1>
       <p>
         The abstract operation CreateDecoratorAccessObject takes arguments _kind_ (one of *"field"*, *"accessor"*, *"method"*, *"getter"*, *"setter"*) and _name_ (a Private Name). It returns an object with appropriate accessor functions for the private value.
@@ -21335,7 +21335,7 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-decorator-createsetmetadatafunction" aoid="CreateSetMetadataFunction">
+    <emu-clause id="sec-createsetmetadatafunction" aoid="CreateSetMetadataFunction">
       <h1>CreateSetMetadataFunction ( _kind_, _metadataList_, _propertyKey_ )</h1>
       <p>
         The abstract operation CreateSetMetadataFunction takes arguments _kind_ (one of ~constructor~, ~public~, ~private~), _metadataList_ (a List of Metadata Records), and _propertyKey_ (a string, symbol, Private Name, or ~empty~). It returns a function that can be used to defined metadata on the passed in _metadataList_, and which is associated with the given _kind_ and, if provided, _propertyKey_.
@@ -21376,7 +21376,7 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-decorator-creategetmetadatafunction" aoid="CreateGetMetadataFunction">
+    <emu-clause id="sec-creategetmetadatafunction" aoid="CreateGetMetadataFunction">
       <h1>CreateGetMetadataFunction ( _kind_, _metadataList_, _propertyKey_ )</h1>
       <p>
         The abstract operation CreateGetMetadataFunction takes arguments _kind_ (one of ~constructor~, ~public~, ~private~), _metadataList_ (a List of Metadata Records), and _propertyKey_ (a string, symbol, Private Name, or ~empty~). It returns a function that can be used to defined metadata on the passed in _metadataList_, and which is associated with the given _kind_ and, if provided, _propertyKey_.
@@ -21413,7 +21413,7 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-decorator-convertdecoratormetadatalisttoobject" aoid="ConvertDecoratorMetadataListToObject">
+    <emu-clause id="sec-convertdecoratormetadatalisttoobject" aoid="ConvertDecoratorMetadataListToObject">
       <h1>ConvertDecoratorMetadataListToObject ( _metadataList_, _parentMetadataObj_ )</h1>
       <p>
         The abstract operation ConvertDecoratorMetadataListToObject takes the arguments _metadataList_ (a list of Metadata Records) and _parentMetadataObj_ (an object or *undefined*). It converts the list into an object, which it then returns.
@@ -21464,7 +21464,7 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-decorator-createdecoratorcontextobject" aoid="CreateDecoratorContextObject">
+    <emu-clause id="sec-createdecoratorcontextobject" aoid="CreateDecoratorContextObject">
       <h1>CreateDecoratorContextObject ( _kind_, _name_, _metadataList_ [ , _isStatic_ ] )</h1>
       <p>
         The abstract operation CreateDecoratorContextObject takes arguments _kind_ (one of *"class"*, *"field"*, *"accessor"*, *"method"*, *"getter"*, *"setter"*), _name_ (a string, symbol, or Private Name), and _metadataList_ (a Map whose keys are Symbols and whose values are Metadata Records), and optional argument _isStatic_ (a boolean). It returns a the context object which is passed as the second argument to decorators of the given kind.
