@@ -21478,7 +21478,7 @@
           1. Assert: _kind_ is not *"class"*.
           1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"name"*, _name_.[[Description]]).
           1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"isPrivate"*, *true*).
-          1. Let _access_ be ! CreateDecoratorAccessObject(~method~, _name_).
+          1. Let _access_ be ! CreateDecoratorAccessObject(*"method"*, _name_).
           1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"access"*, _access_).
           1. Let _setMetadata_ be ! CreateSetMetadataFunction(~private~, _metadataList_, ~empty~).
           1. Let _getMetadata_ be ! CreateGetMetadataFunction(~private~, _metadataList_, ~empty~).
