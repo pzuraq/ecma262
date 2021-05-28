@@ -11598,7 +11598,7 @@
 
     <emu-clause id="sec-definemethodproperty" aoid="DefineMethodProperty">
       <h1>DefineMethodProperty ( _key_, _homeObject_, _closure_, _enumerable_ [ , _decorators_ [ , _metadataList_ [ , _isStatic_ ] ] ] )</h1>
-      <p>The abstract operation DefineMethodProperty takes arguments _key_ (a property key or Private Name), _homeObject_ (an Object), _closure_ (a function object), and _enumerable_ (a Boolean), and the optional parameters _decorators_ (A list of records), _metadataList_ (an object), and _isStatic_ (a Boolean). It performs the following steps when called:</p>
+      <p>The abstract operation DefineMethodProperty takes arguments _key_ (a property key or Private Name), _homeObject_ (an Object), _closure_ (a function object), and _enumerable_ (a Boolean), and optional arguments _decorators_ (A list of records), _metadataList_ (an object), and _isStatic_ (a Boolean). It performs the following steps when called:</p>
       <emu-alg>
         1. Perform ! SetFunctionName(_closure_, _key_).
         1. Let _initializers_ be a new empty List.
@@ -21416,7 +21416,7 @@
     <emu-clause id="sec-convertdecoratormetadatalisttoobject" aoid="ConvertDecoratorMetadataListToObject">
       <h1>ConvertDecoratorMetadataListToObject ( _metadataList_, _parentMetadataObj_ )</h1>
       <p>
-        The abstract operation ConvertDecoratorMetadataListToObject takes the arguments _metadataList_ (a list of Metadata Records) and _parentMetadataObj_ (an object or *undefined*). It converts the list into an object, which it then returns.
+        The abstract operation ConvertDecoratorMetadataListToObject takes arguments _metadataList_ (a list of Metadata Records) and _parentMetadataObj_ (an object or *undefined*). It converts the list into an object, which it then returns.
       </p>
       <emu-alg>
         1. If _parentMetadataObj_ is *undefined*, let _metadataObj_ be ! OrdinaryObjectCreate(%Object.prototype%).
@@ -21906,7 +21906,7 @@
 
     <emu-clause id="sec-createfieldinitializerfunction" aoid="CreateFieldInitializerFunction">
       <h1>CreateFieldInitializerFunction ( _propName_, _homeObject_, _Initializer_ )</h1>
-      <p>The abstract operation CreateFieldInitializerFunction takes the arguments _propName_, _homeObject_, and _Initializer_. This operation returns a function. It takes the following steps:</p>
+      <p>The abstract operation CreateFieldInitializerFunction takes arguments _propName_, _homeObject_, and _Initializer_. This operation returns a function. It takes the following steps:</p>
       <emu-alg>
         1. Let _formalParameterList_ be an instance of the production <emu-grammar>FormalParameters : [empty]</emu-grammar>.
         1. Let _scope_ be the LexicalEnvironment of the running execution context.
