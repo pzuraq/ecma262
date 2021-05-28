@@ -22140,6 +22140,7 @@
         1. Let _instanceElements_ be a new empty List.
         1. Let _staticElements_ be a new empty List.
         1. Let _instanceMetadataList_ be a new empty List.
+        1. Let _staticMetadataList_ be a new empty List.
         1. For each |ClassElement| _e_ of _elements_, do
           1. If IsStatic of _e_ is *false*, then
             1. Let _element_ be ClassElementEvaluation of _e_ with arguments _proto_, *false*, and _instanceMetadataList_.
@@ -22179,7 +22180,6 @@
         1. For each PrivateElement _method_ of _staticPrivateMethods_, do
           1. Perform ! PrivateMethodOrAccessorAdd(_method_, _F_).
         1. Let _initializers_ be a new empty List.
-        1. Let _staticMetadataList_ be a new empty List.
         1. For each element _decorator_ of _decorators_, do
           1. Let _context_ be CreateDecoratorContextObject(*"class"*, _className_, _initializers_, _staticMetadataList_).
           1. Let _newF_ be ? Call(_decorator_.[[Decorator]], *undefined*, &laquo; _F_, _context_ &raquo;).
