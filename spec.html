@@ -6797,8 +6797,8 @@
       </dl>
       <emu-alg>
         1. Let _privateMethods_ be a new empty List.
-        1. For each element _e_ of _elementDefinitions_, do
-          1. If _e_.[[Key]] is a Private Name and _e_.[[Kind]] is ~method~, ~getter~, ~setter~, or ~accessor~, then
+        1. For each element _element_ of _elementDefinitions_, do
+          1. If _element_.[[Key]] is a Private Name and _element_.[[Kind]] is ~method~, ~getter~, ~setter~, or ~accessor~, then
             1. If _privateMethods_ contains a PrivateElement whose [[Key]] is _element_.[[Key]], then
               1. Let _existing_ be that PrivateElement.
               1. Assert: _element_.[[Kind]] is ~getter~ or ~setter~.
@@ -6815,7 +6815,7 @@
               1. Append _privateElement_ to _privateMethods_.
         1. For each element _method_ of _privateMethods_, do
           1. Perform ? PrivateMethodOrAccessorAdd(_O_, _method_).
-          1. Return ~unused~.
+        1. Return ~unused~.
       </emu-alg>
     </emu-clause>
 
@@ -6834,7 +6834,7 @@
         1. Else, let _fieldName_ be _elementRecord_.[[Key]].
         1. Let _initValue_ be *undefined*.
         1. For each element _initializer_ of _elementRecord_.[[Initializers]], do
-          1. Set _initValue_ to ? Call(_initializer_, _receiver_, &laquo; _initValue_ &raquo;).
+          1. Set _initValue_ to ? Call(_initializer_, _receiver_, « _initValue_ »).
         1. If _fieldName_ is a Private Name, then
           1. Perform ? PrivateFieldAdd(_receiver_, _fieldName_, _initValue_).
         1. Else,
@@ -6859,8 +6859,8 @@
         1. For each element _initializer_ of _constructor_.[[Initializers]], do
           1. Perform ? Call(_O_, _initializer_).
         1. For each element _e_ of _elements_, do
-          1. If _elementRecord_.[[Kind]] is ~field~ or ~accessor~, then
-            1. Perform ? InitializeFieldOrAccessor(_O_, _elementRecord_).
+          1. If _e_.[[Kind]] is ~field~ or ~accessor~, then
+            1. Perform ? InitializeFieldOrAccessor(_O_, _e_).
         1. Return ~unused~.
       </emu-alg>
     </emu-clause>
@@ -9385,7 +9385,7 @@
           DecoratorList? `static` MethodDefinition
       </emu-grammar>
       <emu-alg>
-        1. Return ComputedPropertyContains of |MethodDefinition|.
+        1. Return ComputedPropertyContains of |MethodDefinition| with argument _symbol_.
       </emu-alg>
       <emu-grammar>
         ClassElement :
@@ -9393,7 +9393,7 @@
           DecoratorList? `static` FieldDefinition `;`
       </emu-grammar>
       <emu-alg>
-        1. Return ComputedPropertyContains of |FieldDefinition|.
+        1. Return ComputedPropertyContains of |FieldDefinition| with argument _symbol_.
       </emu-alg>
       <emu-grammar>ClassElement : ClassStaticBlock</emu-grammar>
       <emu-alg>
@@ -13188,7 +13188,7 @@
             [[Initializers]]
           </td>
           <td>
-            a List of function objects | ~empty~
+            a List of function objects
           </td>
           <td>
             If the function is a class with decorated prototype methods or accessors, this is a list of initializer functions added by the decorators, or ~empty~.
@@ -24159,8 +24159,8 @@
 
       DecoratorMemberExpression[Yield, Await] :
         IdentifierReference[?Yield, ?Await]
-        PrivateIdentifier
         DecoratorMemberExpression[?Yield, ?Await] `.` IdentifierName
+        DecoratorMemberExpression[?Yield, ?Await] `.` PrivateIdentifier
 
       DecoratorParenthesizedExpression[Yield, Await] :
         `(` Expression[+In, ?Yield, ?Await] `)`
@@ -24223,11 +24223,11 @@
       <emu-alg>
         1. Let _accessObj_ be OrdinaryObjectCreate(%Object.prototype%).
         1. If _kind_ is ~field~, ~method~, ~accessor~, or ~getter~, then
-          1. Let _getterClosure_ be a new Abstract Closure with parameter (_obj_) that captures _name_ and performs the following steps when called:
+          1. Let _getterClosure_ be a new Abstract Closure with parameters (_obj_) that captures _name_ and performs the following steps when called:
             1. If _obj_ is not an Object, throw a *TypeError* exception.
             1. If _name_ is either a String or a Symbol, return ? Get(_obj_, _name_).
             1. Else, return ? PrivateGet(_name_, _obj_).
-          1. Let _getter_ be CreateBuiltinFunction(_getterClosure_, 1, *""*, &laquo; &raquo;).
+          1. Let _getter_ be CreateBuiltinFunction(_getterClosure_, 1, *""*, « »).
           1. Perform ! CreateDataPropertyOrThrow(_accessObj_, *"get"*, _getter_).
         1. If _kind_ is ~field~, ~accessor~, or ~setter~, then
           1. Let _setterClosure_ be a new Abstract Closure with parameters (_obj_, _value_) that captures _name_ and performs the following steps when called:
@@ -24235,14 +24235,14 @@
             1. If _name_ is either a String or a Symbol, perform ? Set(_obj_, _name_, _value_, *true*).
             1. Else, perform ? PrivateSet(_name_, _obj_, _value_).
             1. Return *undefined*.
-          1. Let _setter_ be CreateBuiltinFunction(_setterClosure_, 2, *""*, &laquo; &raquo;).
+          1. Let _setter_ be CreateBuiltinFunction(_setterClosure_, 2, *""*, « »).
           1. Perform ! CreateDataPropertyOrThrow(_accessObj_, *"set"*, _setter_).
-        1. Let _hasClosure_ be a new Abstract Closure with parameter (_obj_) that captures _name_ and performs the following steps when called:
+        1. Let _hasClosure_ be a new Abstract Closure with parameters (_obj_) that captures _name_ and performs the following steps when called:
           1. If _obj_ is not an Object, throw a *TypeError* exception.
           1. If _name_ is either a String or a Symbol, return ? HasProperty(_obj_, _name_).
           1. If PrivateElementFind(_obj_, _name_) is not ~empty~, return *true*.
           1. Return *false*.
-        1. Let _has_ be CreateBuiltinFunction(_hasClosure_, 1, *""*, &laquo; &raquo;).
+        1. Let _has_ be CreateBuiltinFunction(_hasClosure_, 1, *""*, « »).
         1. Perform ! CreateDataPropertyOrThrow(_accessObj_, *"has"*, _has_).
         1. Return _accessObj_.
       </emu-alg>
@@ -24264,7 +24264,7 @@
           1. If _decorationState_.[[Finished]] is *true*, throw a *TypeError* exception.
           1. Append _initializer_ to _initializers_.
           1. Return *undefined*.
-        1. Return CreateBuiltinFunction(_addInitializerClosure_, 1, *""*, &laquo; &raquo;).
+        1. Return CreateBuiltinFunction(_addInitializerClosure_, 1, *""*, « »).
       </emu-alg>
     </emu-clause>
 
@@ -24272,7 +24272,7 @@
       <h1>
         CreateDecoratorContextObject (
           _kind_: ~class~, ~field~, ~method~, ~accessor~, ~getter~, or ~setter~,
-          _name_: a String, a Symbol, or Private Name,
+          _name_: a String, a Symbol, or a Private Name,
           _initializers_: a List of function objects,
           _decorationState_: a Record with a field [[Finished]] (a Boolean),
           optional _isStatic_: a Boolean,
@@ -24337,13 +24337,13 @@
           1. Else if _kind_ is ~setter~, set _value_ to _elementRecord_.[[Set]].
           1. Else if _kind_ is ~accessor~, then
             1. Set _value_ to OrdinaryObjectCreate(%Object.prototype%).
-            1. Perform ! CreateDataPropertyOrThrow(_accessor_, *"get"*, _elementRecord_.[[Get]]).
-            1. Perform ! CreateDataPropertyOrThrow(_accessor_, *"set"*, _elementRecord_.[[Set]]).
-          1. Let _newValue_ be ? Call(_decorator_, *undefined*, &laquo; _value_, _context_ &raquo;).
+            1. Perform ! CreateDataPropertyOrThrow(_value_, *"get"*, _elementRecord_.[[Get]]).
+            1. Perform ! CreateDataPropertyOrThrow(_value_, *"set"*, _elementRecord_.[[Set]]).
+          1. Let _newValue_ be ? Call(_decorator_, *undefined*, « _value_, _context_ »).
           1. Set _decorationState_.[[Finished]] to *true*.
           1. If _kind_ is ~field~, then
-            1. If IsCallable(_initializer_) is *true*, append _initializer_ to _elementRecord_.[[Initializers]].
-            1. Else if _initializer_ is not *undefined*, throw a *TypeError* exception.
+            1. If IsCallable(_newValue_) is *true*, append _newValue_ to _elementRecord_.[[Initializers]].
+            1. Else if _newValue_ is not *undefined*, throw a *TypeError* exception.
           1. Else if _kind_ is ~accessor~, then
             1. If _newValue_ is an Object, then
               1. Let _newGetter_ be ? Get(_newValue_, *"get"*).
@@ -24379,6 +24379,7 @@
         ApplyDecoratorsToClassDefinition (
           _classDef_: a function object,
           _decorators_: a List of function objects,
+          _className_: a property key or a Private Name,
           _extraInitializers_: a List of function objects,
         ): either a normal completion containing a function object, or an abrupt completion
       </h1>
@@ -24389,8 +24390,8 @@
       <emu-alg>
         1. For each element _decorator_ of _decorators_, do
           1. Let _decorationState_ be the Record { [[Finished]]: *false* }.
-          1. Let _context_ be CreateDecoratorContextObject(~class~, _className_, _classExtraInitializers_, _decorationState_).
-          1. Let _newDef_ be ? Call(_decorator_, *undefined*, &laquo; _classDef_, _context_ &raquo;).
+          1. Let _context_ be CreateDecoratorContextObject(~class~, _className_, _extraInitializers_, _decorationState_).
+          1. Let _newDef_ be ? Call(_decorator_, *undefined*, « _classDef_, _context_ »).
           1. Set _decorationState_.[[Finished]] to *true*.
           1. If IsCallable(_newDef_) is *true*, then
             1. Set _classDef_ to _newDef_.
@@ -24893,8 +24894,8 @@
       <h1>
         ApplyDecoratorsAndDefineMethod (
           _homeObject_: an Object,
-          _methodDefinition_: a ClassElementDefinition record,
-          _extraInitializers_: A List of function objects,
+          _methodDefinition_: a ClassElementDefinition Record,
+          _extraInitializers_: a List of function objects,
           _isStatic_: a Boolean,
         ): either a normal completion containing ~unused~, or an abrupt completion
       </h1>
@@ -24912,7 +24913,7 @@
         CreateFieldInitializerFunction (
           _homeObject_: an Object,
           _propName_: a property key or Private Name,
-          _Initializer_: a function object,
+          _Initializer_: a Parse Node,
         ): a function object
       </h1>
       <dl class="header">
@@ -24943,7 +24944,7 @@
         1. Let _getterClosure_ be a new Abstract Closure with no parameters that captures _privateStateName_ and performs the following steps when called:
           1. Let _o_ be the *this* value.
           1. Return ? PrivateGet(_privateStateName_, _o_).
-        1. Let _getter_ be CreateBuiltinFunction(_getterClosure_, 0, *"get"*, &laquo; &raquo;).
+        1. Let _getter_ be CreateBuiltinFunction(_getterClosure_, 0, *"get"*, « »).
         1. Perform MakeMethod(_getter_, _homeObject_).
         1. Return _getter_.
       </emu-alg>
@@ -24964,7 +24965,7 @@
           1. Let _o_ be the *this* value.
           1. Perform ? PrivateSet(_privateStateName_, _o_, _value_).
           1. Return *undefined*.
-        1. Let _setter_ be CreateBuiltinFunction(_setterClosure_, 1, *"set"*, &laquo; &raquo;).
+        1. Let _setter_ be CreateBuiltinFunction(_setterClosure_, 1, *"set"*, « »).
         1. Perform MakeMethod(_setter_, _homeObject_).
         1. Return _setter_.
       </emu-alg>
@@ -25194,7 +25195,7 @@
         1. Let _instanceExtraInitializers_ be a new empty List.
         1. Let _staticExtraInitializers_ be a new empty List.
         1. For each element _e_ of _staticElements_, do
-          1. If _e_.[[Kind]] is not ~field~, then
+          1. If _e_ is a ClassElementDefinition Record and _e_.[[Kind]] is not ~field~, then
             1. Let _result_ be Completion(ApplyDecoratorsAndDefineMethod(_F_, _e_, _staticExtraInitializers_, *true*)).
             1. If _result_ is an abrupt completion, then
               1. Set the running execution context's PrivateEnvironment to _outerPrivateEnvironment_.
@@ -25219,16 +25220,15 @@
               1. Return ? _result_.
         1. Set _F_.[[Elements]] to _instanceElements_.
         1. Set _F_.[[Initializers]] to _instanceExtraInitializers_.
-        1. For each PrivateElement _method_ of _staticPrivateMethods_, do
-          1. Perform ! PrivateMethodOrAccessorAdd(_F_, _method_).
+        1. Perform ? InitializePrivateMethods(_F_, _staticElements_).
         1. Let _classExtraInitializers_ be a new empty List.
-        1. Let _newF_ be Completion(ApplyDecoratorsToClassDefinition(_F_, _decorators_, _classExtraInitializers_)).
+        1. Let _newF_ be Completion(ApplyDecoratorsToClassDefinition(_F_, _decorators_, _className_, _classExtraInitializers_)).
         1. If _newF_ is an abrupt completion, then
           1. Set the running execution context's PrivateEnvironment to _outerPrivateEnvironment_.
           1. Return ? _result_.
         1. Set _F_ to _newF_.[[Value]].
         1. If _classBinding_ is not *undefined*, then
-          1. Perform _classScope_.InitializeBinding(_classBinding_, _F_).
+          1. Perform _classEnv_.InitializeBinding(_classBinding_, _F_).
         1. For each element _initializer_ of _staticExtraInitializers_, do
           1. Let _result_ be Completion(Call(_initializer_, _F_)).
           1. If _result_ is an abrupt completion, then
