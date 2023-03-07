@@ -6799,8 +6799,7 @@
         1. Let _privateMethods_ be a new empty List.
         1. For each element _element_ of _elementDefinitions_, do
           1. If _element_.[[Key]] is a Private Name and _element_.[[Kind]] is ~method~, ~getter~, ~setter~, or ~accessor~, then
-            1. If _privateMethods_ contains a PrivateElement whose [[Key]] is _element_.[[Key]], then
-              1. Let _existing_ be that PrivateElement.
+            1. If _privateMethods_ contains a PrivateElement _existing_ such that _existing.[[Key]] is _element_.[[Key]], then
               1. Assert: _element_.[[Kind]] is ~getter~ or ~setter~.
               1. Assert: _existing_.[[Kind]] is ~accessor~.
               1. If _element_.[[Get]] is *undefined*, then
@@ -6819,7 +6818,7 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-initializefieldoraccessor" type="abstract operation">
+    <emu-clause id="sec-initializefieldoraccessor" oldids="sec-definefield" type="abstract operation">
       <h1>
         InitializeFieldOrAccessor (
           _receiver_: an Object,
@@ -24176,19 +24175,19 @@
       <emu-grammar>Decorator : `@` DecoratorMemberExpression</emu-grammar>
       <emu-alg>
         1. Let _expr_ be the |MemberExpression| that is covered by |DecoratorMemberExpression|.
-        1. Let _ref_ be the result of evaluating _expr_.
+        1. Let _ref_ be ? Evaluation of _expr_.
         1. Return ? GetValue(_ref_).
       </emu-alg>
       <emu-grammar>Decorator : `@` DecoratorCallExpression</emu-grammar>
       <emu-alg>
         1. Let _expr_ be the |CallMemberExpression| that is covered by |DecoratorCallExpression|.
-        1. Let _ref_ be the result of evaluating _expr_.
+        1. Let _ref_ be ? Evaluation of _expr_.
         1. Return ? GetValue(_ref_).
       </emu-alg>
       <emu-grammar>Decorator : `@` DecoratorParenthesizedExpression</emu-grammar>
       <emu-alg>
         1. Let _expr_ be the |MemberExpression| that is covered by |DecoratorParenthesizedExpression|.
-        1. Let _ref_ be the result of evaluating _expr_.
+        1. Let _ref_ be ? Evaluation of _expr_.
         1. Return ? GetValue(_ref_).
       </emu-alg>
     </emu-clause>
@@ -24945,6 +24944,7 @@
           1. Let _o_ be the *this* value.
           1. Return ? PrivateGet(_privateStateName_, _o_).
         1. Let _getter_ be CreateBuiltinFunction(_getterClosure_, 0, *"get"*, « »).
+        1. Perform SetFunctionName(_getter_, _name_, *"get"*).
         1. Perform MakeMethod(_getter_, _homeObject_).
         1. Return _getter_.
       </emu-alg>
@@ -24966,6 +24966,7 @@
           1. Perform ? PrivateSet(_privateStateName_, _o_, _value_).
           1. Return *undefined*.
         1. Let _setter_ be CreateBuiltinFunction(_setterClosure_, 1, *"set"*, « »).
+        1. Perform SetFunctionName(_setter_, _name_, *"set"*).
         1. Perform MakeMethod(_setter_, _homeObject_).
         1. Return _setter_.
       </emu-alg>
@@ -24997,7 +24998,7 @@
         1. Let _name_ be the result of evaluating |ClassElementName|.
         1. ReturnIfAbrupt(_name_).
         1. Let _privateStateDesc_ be the string-concatenation of _name_ and *" accessor storage"*.
-        1. Let _privateStateName_ be a new Private Name whose [[Description]] value is _privateStateDesc_.
+        1. Let _privateStateName_ be a new Private Name whose [[Description]] is _privateStateDesc_.
         1. Let _getter_ be MakeAutoAccessorGetter(_homeObject_, _name_, _privateStateName_).
         1. Let _setter_ be MakeAutoAccessorSetter(_homeObject_, _name_, _privateStateName_).
         1. Let _initializers_ be a new empty List.
@@ -25255,7 +25256,7 @@
     <emu-clause id="sec-runtime-semantics-bindingclassdeclarationevaluation" type="sdo">
       <h1>
         Runtime Semantics: BindingClassDeclarationEvaluation (
-          _decorators_: a List,
+          _decorators_: a List of function objects,
         ): either a normal completion containing a function object or an abrupt completion
       </h1>
       <dl class="header">
@@ -28694,7 +28695,7 @@
             It is a Syntax Error if |DecoratorList| is present and |Declaration| is not |ClassDeclaration|.
           </li>
           <li>
-            It is a Syntax Error if |DecoratorList| is present and |Declaration| is a |ClassDeclaration| and the |DecoratorList| of that |ClassDeclaration| is present.
+            It is a Syntax Error if |DecoratorList| is present, |Declaration| is a |ClassDeclaration|, and the |DecoratorList| of that |ClassDeclaration| is present.
           </li>
         </ul>
         <emu-grammar>ExportDeclaration : DecoratorList? `export` `default` ClassDeclaration</emu-grammar>
@@ -47788,8 +47789,8 @@ THH:mm:ss.sss
     <emu-prodref name="DecoratorList"></emu-prodref>
     <emu-prodref name="Decorator"></emu-prodref>
     <emu-prodref name="DecoratorMemberExpression"></emu-prodref>
-    <emu-prodref name="DecoratorCallExpression"></emu-prodref>
     <emu-prodref name="DecoratorParenthesizedExpression"></emu-prodref>
+    <emu-prodref name="DecoratorCallExpression"></emu-prodref>
     <emu-prodref name="ClassDeclaration"></emu-prodref>
     <emu-prodref name="ClassExpression"></emu-prodref>
     <emu-prodref name="ClassTail"></emu-prodref>
