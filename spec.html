@@ -24261,6 +24261,7 @@
       <emu-alg>
         1. Let _addInitializerClosure_ be a new Abstract Closure with parameters (_initializer_) that captures _initializers_ and _decorationState_ and performs the following steps when called:
           1. If _decorationState_.[[Finished]] is *true*, throw a *TypeError* exception.
+          1. If IsCallable(_initializer_) is *false*, throw a *TypeError* exception.
           1. Append _initializer_ to _initializers_.
           1. Return *undefined*.
         1. Return CreateBuiltinFunction(_addInitializerClosure_, 1, *""*, « »).
