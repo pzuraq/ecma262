@@ -4646,6 +4646,47 @@
       </emu-table>
     </emu-clause>
 
+    <emu-clause id="sec-decoratordefinition-record-specification-type">
+      <h1>The DecoratorDefinition Record Specification Type</h1>
+      <p>
+        The DecoratorDefinition type is a Record used in the specification of
+        decorators.
+      </p>
+      <p>
+        Values of the DecoratorDefinition type are Record values whose fields
+        are defined by
+        <emu-xref href="#table-decoratordefinition-fields"></emu-xref>. Such
+        values are referred to as
+        <dfn variants="DecoratorDefinition Record"
+          >DecoratorDefinition Records</dfn
+        >.
+      </p>
+      <emu-table
+        id="table-decoratordefinition-fields"
+        caption="DecoratorDefinition Record Fields"
+      >
+        <table>
+          <tr>
+            <th>Field Name</th>
+            <th>Value</th>
+            <th>Meaning</th>
+          </tr>
+          <tr>
+            <td>[[Decorator]]</td>
+            <td>a function object.</td>
+            <td>The decorator function.</td>
+          </tr>
+          <tr>
+            <td>[[Receiver]]</td>
+            <td>a Reference Record or an ECMAScript language value</td>
+            <td>
+              The receiver that the decorator function should be called with.
+            </td>
+          </tr>
+        </table>
+      </emu-table>
+    </emu-clause>
+
     <emu-clause id="sec-classelementdefinition-record-specification-type" oldids="sec-classfielddefinition-record-specification-type">
       <h1>The ClassElementDefinition Record Specification Type</h1>
       <p>The ClassElementDefinition type is a Record used in the specification of private and public, static and non-static class fields, methods, and accessors.</p>
@@ -4758,7 +4799,7 @@
               ~field~, ~method~, ~accessor~, ~getter~, ~setter~
             </td>
             <td>
-              a List of function objects or ~empty~
+              a List of DecoratorDefinition Records or ~empty~
             </td>
             <td>
               The decorators applied to the class element, if any.
@@ -24169,31 +24210,34 @@
     </emu-grammar>
 
     <emu-clause id="sec-decoratorevaluation" type="sdo">
-      <h1>Runtime Semantics: DecoratorEvaluation ( ): either a normal completion containing an ECMAScript language value or an abrupt completion</h1>
+      <h1>Runtime Semantics: DecoratorEvaluation ( ): either a normal completion containing a DecoratorDefinition Record or an abrupt completion</h1>
       <dl class="header">
       </dl>
       <emu-grammar>Decorator : `@` DecoratorMemberExpression</emu-grammar>
       <emu-alg>
         1. Let _expr_ be the |MemberExpression| that is covered by |DecoratorMemberExpression|.
         1. Let _ref_ be ? Evaluation of _expr_.
-        1. Return ? GetValue(_ref_).
+        1. Let _value_ be ? GetValue(_ref_).
+        1. Return DecoratorDefinition Record { [[Decorator]]: _value_, [[Receiver]]: _ref_ }.
       </emu-alg>
       <emu-grammar>Decorator : `@` DecoratorCallExpression</emu-grammar>
       <emu-alg>
         1. Let _expr_ be the |CallMemberExpression| that is covered by |DecoratorCallExpression|.
         1. Let _ref_ be ? Evaluation of _expr_.
-        1. Return ? GetValue(_ref_).
+        1. Let _value_ be ? GetValue(_ref_).
+        1. Return DecoratorDefinition Record { [[Decorator]]: _value_, [[Receiver]]: _ref_ }.
       </emu-alg>
       <emu-grammar>Decorator : `@` DecoratorParenthesizedExpression</emu-grammar>
       <emu-alg>
         1. Let _expr_ be the |MemberExpression| that is covered by |DecoratorParenthesizedExpression|.
         1. Let _ref_ be ? Evaluation of _expr_.
-        1. Return ? GetValue(_ref_).
+        1. Let _value_ be ? GetValue(_ref_).
+        1. Return DecoratorDefinition Record { [[Decorator]]: _value_, [[Receiver]]: _ref_ }.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-decoratorlistevaluation" type="sdo">
-      <h1>Runtime Semantics: DecoratorListEvaluation ( ): either a normal completion containing a List of ECMAScript language values or an abrupt completion</h1>
+      <h1>Runtime Semantics: DecoratorListEvaluation ( ): either a normal completion containing a List of DecoratorDefinition Records or an abrupt completion</h1>
       <dl class="header">
       </dl>
       <emu-grammar>DecoratorList : DecoratorList? Decorator</emu-grammar>
@@ -24328,7 +24372,9 @@
         1. If _decorators_ is ~empty~, return ~unused~.
         1. Let _key_ be _elementRecord_.[[Key]].
         1. Let _kind_ be _elementRecord_.[[Kind]].
-        1. For each element _decorator_ of _decorators_, do
+        1. For each element _decoratorRecord_ of _decorators_, do
+          1. Let _decorator_ be _decoratorRecord_.[[Decorator]].
+          1. Let _decoratorReceiver_ be _decoratorRecord_.[[Receiver]].
           1. Let _decorationState_ be the Record { [[Finished]]: *false* }.
           1. Let _context_ be CreateDecoratorContextObject(_kind_, _key_, _extraInitializers_, _decorationState_, _isStatic_).
           1. Let _value_ be *undefined*.
@@ -24339,7 +24385,7 @@
             1. Set _value_ to OrdinaryObjectCreate(%Object.prototype%).
             1. Perform ! CreateDataPropertyOrThrow(_value_, *"get"*, _elementRecord_.[[Get]]).
             1. Perform ! CreateDataPropertyOrThrow(_value_, *"set"*, _elementRecord_.[[Set]]).
-          1. Let _newValue_ be ? Call(_decorator_, *undefined*, « _value_, _context_ »).
+          1. Let _newValue_ be ? Call(_decorator_, _decoratorReceiver_, « _value_, _context_ »).
           1. Set _decorationState_.[[Finished]] to *true*.
           1. If _kind_ is ~field~, then
             1. If IsCallable(_newValue_) is *true*, append _newValue_ to _elementRecord_.[[Initializers]].
@@ -24374,7 +24420,7 @@
       <h1>
         ApplyDecoratorsToClassDefinition (
           _classDef_: a function object,
-          _decorators_: a List of function objects,
+          _decorators_: a List of DecoratorDefinition Records,
           _className_: a property key or a Private Name,
           _extraInitializers_: a List of function objects,
         ): either a normal completion containing a function object, or an abrupt completion
@@ -24384,10 +24430,12 @@
         <dd>Applies the passed decorators to the passed class definition.</dd>
       </dl>
       <emu-alg>
-        1. For each element _decorator_ of _decorators_, do
+        1. For each element _decoratorRecord_ of _decorators_, do
+          1. Let _decorator_ be _decoratorRecord_.[[Decorator]].
+          1. Let _decoratorReceiver_ be _decoratorRecord_.[[Receiver]].
           1. Let _decorationState_ be the Record { [[Finished]]: *false* }.
           1. Let _context_ be CreateDecoratorContextObject(~class~, _className_, _extraInitializers_, _decorationState_).
-          1. Let _newDef_ be ? Call(_decorator_, *undefined*, « _classDef_, _context_ »).
+          1. Let _newDef_ be ? Call(_decorator_, _decoratorReceiver_, « _classDef_, _context_ »).
           1. Set _decorationState_.[[Finished]] to *true*.
           1. If IsCallable(_newDef_) is *true*, then
             1. Set _classDef_ to _newDef_.
@@ -25100,7 +25148,7 @@
         Runtime Semantics: ClassDefinitionEvaluation (
           _classBinding_: a String or *undefined*,
           _className_: a property key or a Private Name,
-          _decorators_: a List of function objects,
+          _decorators_: a List of DecoratorDefinition Records,
         ): either a normal completion containing a function object or an abrupt completion
       </h1>
       <dl class="header">
@@ -25253,7 +25301,7 @@
     <emu-clause id="sec-runtime-semantics-bindingclassdeclarationevaluation" type="sdo">
       <h1>
         Runtime Semantics: BindingClassDeclarationEvaluation (
-          _decorators_: a List of function objects,
+          _decorators_: a List of DecoratorDefinition Records,
         ): either a normal completion containing a function object or an abrupt completion
       </h1>
       <dl class="header">
