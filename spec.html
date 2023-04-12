@@ -24359,13 +24359,10 @@
           1. Else,
             1. If IsCallable(_newValue_) is *true*, then
               1. If _kind_ is ~getter~, then
-                1. Perform SetFunctionName(_newValue_, _key_, *"get"*).
                 1. Set _elementRecord_.[[Get]] to _newValue_.
               1. Else if _kind_ is ~setter~, then
-                1. Perform SetFunctionName(_newValue_, _key_, *"set"*).
                 1. Set _elementRecord_.[[Set]] to _newValue_.
               1. Else,
-                1. Perform SetFunctionName(_newValue_, _key_).
                 1. Set _elementRecord_.[[Value]] to _newValue_.
             1. Else if _newValue_ is not *undefined*, throw a *TypeError* exception.
         1. Set _elementRecord_.[[Decorators]] to ~empty~.
