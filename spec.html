@@ -25257,7 +25257,7 @@
         1. Let _instanceExtraInitializers_ be a new empty List.
         1. Let _staticExtraInitializers_ be a new empty List.
         1. Let _metadataParent_ be ? Get(_constructorParent_, @@metadata).
-        1. If _metadataParent_ is *undefined*, let _metadataParent_ be %Object.prototype%.
+        1. If _metadataParent_ is *undefined*, let _metadataParent_ be *null*.
         1. Let _metadataObj_ be OrdinaryObjectCreate(_metadataParent_).
         1. For each element _e_ of _staticElements_, do
           1. If _e_ is a ClassElementDefinition Record and _e_.[[Kind]] is not ~field~, then
