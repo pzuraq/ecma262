@@ -24388,7 +24388,7 @@
           1. Let _newValue_ be ? Call(_decorator_, _decoratorReceiver_, « _value_, _context_ »).
           1. Set _decorationState_.[[Finished]] to *true*.
           1. If _kind_ is ~field~, then
-            1. If IsCallable(_newValue_) is *true*, append _newValue_ to _elementRecord_.[[Initializers]].
+            1. If IsCallable(_newValue_) is *true*, prepend _newValue_ to _elementRecord_.[[Initializers]].
             1. Else if _newValue_ is not *undefined*, throw a *TypeError* exception.
           1. Else if _kind_ is ~accessor~, then
             1. If _newValue_ is an Object, then
@@ -24399,7 +24399,7 @@
               1. If IsCallable(_newSetter_) is *true*, set _elementRecord_.[[Set]] to _newSetter_.
               1. Else if _newSetter_ is not *undefined*, throw a *TypeError* exception.
               1. Let _initializer_ be ? Get(_newValue_, *"init"*).
-              1. If IsCallable(_initializer_) is *true*, append _initializer_ to _elementRecord_.[[Initializers]].
+              1. If IsCallable(_initializer_) is *true*, prepend _initializer_ to _elementRecord_.[[Initializers]].
               1. Else if _initializer_ is not *undefined*, throw a *TypeError* exception.
             1. Else if _newValue_ is not *undefined*, throw a *TypeError* exception.
           1. Else,
