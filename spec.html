@@ -24330,7 +24330,7 @@
           _name_: a String, a Symbol, or a Private Name,
           _initializers_: a List of function objects,
           _decorationState_: a Record with a field [[Finished]] (a Boolean),
-          _metadataObj_: an Object,
+          _metadataObj_: an Object or ~empty~,
           optional _isStatic_: a Boolean,
         ): an Object
       </h1>
@@ -24362,7 +24362,7 @@
           1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"name"*, _name_).
         1. Let _addInitializer_ be CreateAddInitializerFunction(_initializers_, _decorationState_).
         1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"addInitializer"*, _addInitializer_).
-        1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"metadata"*, _metadataObj_).
+        1. If _metadata_ is not ~empty~, perform ! CreateDataPropertyOrThrow(_contextObj_, *"metadata"*, _metadataObj_).
         1. Return _contextObj_.
       </emu-alg>
     </emu-clause>
@@ -24373,7 +24373,7 @@
           _homeObject_: an Object,
           _elementRecord_: a ClassElementDefinition Record,
           _extraInitializers_: a List of function objects,
-          _metadataObj_: an Object,
+          _metadataObj_: an Object or ~empty~,
           _isStatic_: a Boolean,
         ): either a normal completion containing ~unused~, or an abrupt completion
       </h1>
@@ -25237,6 +25237,8 @@
         1. Perform CreateMethodProperty(_proto_, *"constructor"*, _F_).
         1. If |ClassBody?| is not present, let _elements_ be a new empty List.
         1. Else, let _elements_ be NonConstructorElements of |ClassBody|.
+        1. Let _hasDecorators_ be *false*.
+        1. If _decorators_ is not empty, set _hasDecorators_ to *true*.
         1. Let _instanceElements_ be a new empty List.
         1. Let _staticElements_ be a new empty List.
         1. For each |ClassElement| _e_ of _elements_, do
@@ -25248,6 +25250,7 @@
             1. Return ? _result_.
           1. Let _element_ be _result_.[[Value]].
           1. If _element_ is a ClassElementDefinition Record, then
+            1. If _e_.[[Decorators]] is not empty, set _hasDecorators_ to *true*.
             1. If IsStatic of _e_ is *false*, append _element_ to _instanceElements_.
             1. Else, append _element_ to _staticElements_.
           1. Else,
@@ -25256,9 +25259,11 @@
         1. Set the running execution context's LexicalEnvironment to _env_.
         1. Let _instanceExtraInitializers_ be a new empty List.
         1. Let _staticExtraInitializers_ be a new empty List.
-        1. Let _metadataParent_ be ? Get(_constructorParent_, @@metadata).
-        1. If _metadataParent_ is *undefined*, let _metadataParent_ be *null*.
-        1. Let _metadataObj_ be OrdinaryObjectCreate(_metadataParent_).
+        1. Let _metadataObj_ be ~empty~.
+        1. If _hasDecorators_ is *true*, then
+          1. If |ClassHeritage?| is present, let _metadataParent_ be ? Get(_constructorParent_, @@metadata).
+          1. Else, let _metadataParent_ be *null*.
+          1. Set _metadataObj_ to OrdinaryObjectCreate(_metadataParent_).
         1. For each element _e_ of _staticElements_, do
           1. If _e_ is a ClassElementDefinition Record and _e_.[[Kind]] is not ~field~, then
             1. Let _result_ be Completion(ApplyDecoratorsAndDefineMethod(_F_, _e_, _staticExtraInitializers_, _metadataObj_, *true*)).
@@ -25292,7 +25297,11 @@
           1. Set the running execution context's PrivateEnvironment to _outerPrivateEnvironment_.
           1. Return ? _result_.
         1. Set _F_ to _newF_.[[Value]].
-        1. Perform ! DefinePropertyOrThrow(_F_, @@metadata, PropertyDescriptor { [[Value]]: _metadataObj_, [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }).
+        1. If _metadataObj_ is not ~empty~, then
+          1. Let _setMetadataResult_ be Completion(DefinePropertyOrThrow(_F_, @@metadata, PropertyDescriptor { [[Value]]: _metadataObj_, [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* })).
+          1. If _setMetadataResult_ is an abrupt completion, then
+            1. Set the running execution context's PrivateEnvironment to _outerPrivateEnvironment_.
+            1. Return ? _setMetadataResult_.
         1. If _classBinding_ is not *undefined*, then
           1. Perform _classEnv_.InitializeBinding(_classBinding_, _F_).
         1. For each element _initializer_ of _staticExtraInitializers_, do
@@ -30619,6 +30628,7 @@
         <li>does not have a *"prototype"* property.</li>
         <li>has a *"length"* property whose value is *+0*<sub>𝔽</sub>.</li>
         <li>has a *"name"* property whose value is the empty String.</li>
+        <li>has a @@metadata property whose value is *null*, which is non-writable and non-configurable to prevent tampering that could be used to globally add metadata to all classes.</li>
       </ul>
       <emu-note>
         <p>The Function prototype object is specified to be a function object to ensure compatibility with ECMAScript code that was created prior to the ECMAScript 2015 specification.</p>
