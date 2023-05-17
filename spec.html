@@ -24330,7 +24330,7 @@
           _name_: a String, a Symbol, or a Private Name,
           _initializers_: a List of function objects,
           _decorationState_: a Record with a field [[Finished]] (a Boolean),
-          _metadataObj_: an Object or ~empty~,
+          _metadataObj_: an Object,
           optional _isStatic_: a Boolean,
         ): an Object
       </h1>
@@ -24362,7 +24362,7 @@
           1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"name"*, _name_).
         1. Let _addInitializer_ be CreateAddInitializerFunction(_initializers_, _decorationState_).
         1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"addInitializer"*, _addInitializer_).
-        1. If _metadata_ is not ~empty~, perform ! CreateDataPropertyOrThrow(_contextObj_, *"metadata"*, _metadataObj_).
+        1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"metadata"*, _metadataObj_).
         1. Return _contextObj_.
       </emu-alg>
     </emu-clause>
@@ -24384,6 +24384,7 @@
       <emu-alg>
         1. Let _decorators_ be _elementRecord_.[[Decorators]].
         1. If _decorators_ is ~empty~, return ~unused~.
+        1. Assert: _metadataObj_ is not ~empty~.
         1. Let _key_ be _elementRecord_.[[Key]].
         1. Let _kind_ be _elementRecord_.[[Kind]].
         1. For each element _decoratorRecord_ of _decorators_, do
@@ -24446,6 +24447,7 @@
       </dl>
       <emu-alg>
         1. For each element _decoratorRecord_ of _decorators_, do
+          1. Assert: _metadataObj_ is not ~empty~.
           1. Let _decorator_ be _decoratorRecord_.[[Decorator]].
           1. Let _decoratorReceiver_ be _decoratorRecord_.[[Receiver]].
           1. Let _decorationState_ be the Record { [[Finished]]: *false* }.
@@ -30628,7 +30630,6 @@
         <li>does not have a *"prototype"* property.</li>
         <li>has a *"length"* property whose value is *+0*<sub>𝔽</sub>.</li>
         <li>has a *"name"* property whose value is the empty String.</li>
-        <li>has a @@metadata property whose value is *null*, which is non-writable and non-configurable to prevent tampering that could be used to globally add metadata to all classes.</li>
       </ul>
       <emu-note>
         <p>The Function prototype object is specified to be a function object to ensure compatibility with ECMAScript code that was created prior to the ECMAScript 2015 specification.</p>
@@ -30753,6 +30754,13 @@
         </emu-note>
         <p>This property is non-writable and non-configurable to prevent tampering that could be used to globally expose the target function of a bound function.</p>
         <p>The value of the *"name"* property of this method is *"[Symbol.hasInstance]"*.</p>
+      </emu-clause>
+
+      <emu-clause id="sec-function.prototype-@@metadata">
+        <h1>Symbol.prototype [ @@metadata ]</h1>
+        <p>The initial value of the @@metadata property is *null*.</p>
+        <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }.</p>
+        <p>This property is non-writable and non-configurable to prevent tampering that could be used to globally expose the target function of a bound function.</p>
       </emu-clause>
     </emu-clause>
 
