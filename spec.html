@@ -24794,8 +24794,9 @@
           1. Let _decoratorReceiver_ be _decoratorRecord_.[[Receiver]].
           1. Let _decorationState_ be the Record { [[Finished]]: *false* }.
           1. Let _context_ be CreateDecoratorContextObject(~class~, _className_, _extraInitializers_, _decorationState_).
-          1. Let _newDef_ be ? Call(_decorator_, _decoratorReceiver_, « _classDef_, _context_ »).
+          1. Let _newDef_ be Completion(Call(_decorator_, _decoratorReceiver_, « _classDef_, _context_ »)).
           1. Set _decorationState_.[[Finished]] to *true*.
+          1. ReturnIfAbrupt(_newDef_).
           1. If IsCallable(_newDef_) is *true*, then
             1. Set _classDef_ to _newDef_.
           1. Else if _newDef_ is not *undefined*, then
