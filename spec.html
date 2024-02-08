@@ -24741,8 +24741,9 @@
             1. Set _value_ to OrdinaryObjectCreate(%Object.prototype%).
             1. Perform ! CreateDataPropertyOrThrow(_value_, *"get"*, _elementRecord_.[[Get]]).
             1. Perform ! CreateDataPropertyOrThrow(_value_, *"set"*, _elementRecord_.[[Set]]).
-          1. Let _newValue_ be ? Call(_decorator_, _decoratorReceiver_, « _value_, _context_ »).
+          1. Let _newValue_ be Completion(Call(_decorator_, _decoratorReceiver_, « _value_, _context_ »)).
           1. Set _decorationState_.[[Finished]] to *true*.
+          1. ReturnIfAbrupt(_newValue_).
           1. If _kind_ is ~field~, then
             1. If IsCallable(_newValue_) is *true*, prepend _newValue_ to _elementRecord_.[[Initializers]].
             1. Else if _newValue_ is not *undefined*, throw a *TypeError* exception.
