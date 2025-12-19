@@ -4773,7 +4773,7 @@
               ~method~
             </td>
             <td>
-              an ECMAScript function object
+              a function object
             </td>
             <td>
               The function for a method definition.
@@ -4833,6 +4833,20 @@
             </td>
             <td>
               The decorators applied to the class element, if any.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              [[Initializer]]
+            </td>
+            <td>
+              ~field~ and ~accessor~
+            </td>
+            <td>
+              a ECMAScript function object or ~empty~
+            </td>
+            <td>
+              The initializers of the field or accessor, if any.
             </td>
           </tr>
           <tr>
@@ -6922,7 +6936,10 @@
         1. Assert: _elementRecord_.[[Kind]] is ~field~ or ~accessor~.
         1. If _elementRecord_ has a [[BackingStorageKey]] field, let _fieldName_ be _elementRecord_.[[BackingStorageKey]].
         1. Else, let _fieldName_ be _elementRecord_.[[Key]].
-        1. Let _initValue_ be *undefined*.
+        1. If _elementRecord_.[[Initializer]] is not ~empty~, then
+          1. Let _initValue_ be ? Call(_initializer_, _receiver_);
+        1. Else,
+          1. Let _initValue_ be *undefined*.
         1. For each element _initializer_ of _elementRecord_.[[Initializers]], do
           1. Set _initValue_ to ? Call(_initializer_, _receiver_, « _initValue_ »).
         1. If _fieldName_ is a Private Name, then
@@ -24642,7 +24659,7 @@
     <emu-clause id="sec-createaddinitializerfunction" type="abstract operation">
       <h1>
         CreateAddInitializerFunction (
-          _initializers_: a List of ECMAScript function objects,
+          _initializers_: a List of function objects,
           _decorationState_: a Record with a field [[Finished]] (a Boolean),
         ): a function object
       </h1>
@@ -24700,6 +24717,7 @@
             1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"private"*, *false*).
             1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"name"*, _name_).
         1. Else,
+          1. Assert: _name_ is a property key.
           1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"name"*, _name_).
         1. Let _addInitializer_ be CreateAddInitializerFunction(_initializers_, _decorationState_).
         1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"addInitializer"*, _addInitializer_).
@@ -24710,7 +24728,6 @@
     <emu-clause id="sec-applydecoratorstoelementdefinition" type="abstract operation">
       <h1>
         ApplyDecoratorsToElementDefinition (
-          _homeObject_: an Object,
           _elementRecord_: a ClassElementDefinition Record,
           _extraInitializers_: a List of function objects,
           _isStatic_: a Boolean,
@@ -24741,7 +24758,7 @@
             1. Set _value_ to OrdinaryObjectCreate(%Object.prototype%).
             1. Perform ! CreateDataPropertyOrThrow(_value_, *"get"*, _elementRecord_.[[Get]]).
             1. Perform ! CreateDataPropertyOrThrow(_value_, *"set"*, _elementRecord_.[[Set]]).
-          1. Let _newValue_ be ? Call(_decorator_, _decoratorReceiver_, « _value_, _context_ »).
+          1. Let _newValue_ be ? Call(_decorator_, ? GetValue(_decoratorReceiver_), « _value_, _context_ »).
           1. Set _decorationState_.[[Finished]] to *true*.
           1. If _kind_ is ~field~, then
             1. If IsCallable(_newValue_) is *true*, prepend _newValue_ to _elementRecord_.[[Initializers]].
@@ -24793,7 +24810,7 @@
           1. Let _decoratorReceiver_ be _decoratorRecord_.[[Receiver]].
           1. Let _decorationState_ be the Record { [[Finished]]: *false* }.
           1. Let _context_ be CreateDecoratorContextObject(~class~, _className_, _extraInitializers_, _decorationState_).
-          1. Let _newDef_ be ? Call(_decorator_, _decoratorReceiver_, « _classDef_, _context_ »).
+          1. Let _newDef_ be ? Call(_decorator_, ? GetValue(_decoratorReceiver_), « _classDef_, _context_ »).
           1. Set _decorationState_.[[Finished]] to *true*.
           1. If IsCallable(_newDef_) is *true*, then
             1. Set _classDef_ to _newDef_.
@@ -25304,8 +25321,8 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. Perform ? ApplyDecoratorsToElementDefinition(_homeObject_, _methodDefinition_, _extraInitializers_, _isStatic_).
-        1. Perform ? DefineMethodProperty(_homeObject_, _methodDefinition_, _isStatic_).
+        1. Perform ? ApplyDecoratorsToElementDefinition(_methodDefinition_, _extraInitializers_, _isStatic_).
+        1. Perform ? DefineMethodProperty(_homeObject_, _methodDefinition_, *false*).
         1. Return ~unused~.
       </emu-alg>
     </emu-clause>
@@ -25347,7 +25364,6 @@
           1. Let _o_ be the *this* value.
           1. Return ? PrivateGet(_o_, _privateStateName_).
         1. Let _getter_ be CreateBuiltinFunction(_getterClosure_, 0, *"get"*, « »).
-        1. Perform SetFunctionName(_getter_, _name_, *"get"*).
         1. Perform MakeMethod(_getter_, _homeObject_).
         1. Return _getter_.
       </emu-alg>
@@ -25369,7 +25385,6 @@
           1. Perform ? PrivateSet(_o_, _privateStateName_, _value_).
           1. Return *undefined*.
         1. Let _setter_ be CreateBuiltinFunction(_setterClosure_, 1, *"set"*, « »).
-        1. Perform SetFunctionName(_setter_, _name_, *"set"*).
         1. Perform MakeMethod(_setter_, _homeObject_).
         1. Return _setter_.
       </emu-alg>
@@ -25392,8 +25407,9 @@
         1. Let _extraInitializers_ be a new empty List.
         1. If |Initializer?| is present, then
           1. Let _initializer_ be CreateFieldInitializerFunction(_homeObject_, _name_, |Initializer|).
-          1. Append _initializer_ to _initializers_.
-        1. Return ClassElementDefinition Record { [[Key]]: _name_, [[Kind]]: ~field~, [[Initializers]]: _initializers_, [[ExtraInitializers]]: _extraInitializers_, [[Decorators]]: ~empty~ }.
+        1. Else,
+          1. Let _initializer_ be ~empty~.
+        1. Return ClassElementDefinition Record { [[Key]]: _name_, [[Kind]]: ~field~, [[Initializer]]: _initializer_, [[Initializers]]: _initializers_, [[ExtraInitializers]]: _extraInitializers_, [[Decorators]]: ~empty~ }.
       </emu-alg>
       <emu-grammar>
         FieldDefinition : `accessor` ClassElementName Initializer?
@@ -25411,11 +25427,12 @@
         1. Let _extraInitializers_ be a new empty List.
         1. If |Initializer?| is present, then
           1. Let _initializer_ be CreateFieldInitializerFunction(_homeObject_, _name_, |Initializer|).
-          1. Append _initializer_ to _initializers_.
+        1. Else,
+          1. Let _initializer_ be ~empty~.
         1. If _name_ is not a Private Name, then
           1. Let _desc_ be the PropertyDescriptor { [[Get]]: _getter_, [[Set]]: _setter_, [[Enumerable]]: *true*, [[Configurable]]: *true* }.
           1. Perform ? DefinePropertyOrThrow(_homeObject_, _name_, _desc_).
-        1. Return ClassElementDefinition Record { [[Key]]: _name_, [[Kind]]: ~accessor~, [[Get]]: _getter_, [[Set]]: _setter_, [[BackingStorageKey]]: _privateStateName_, [[Initializers]]: _initializers_, [[ExtraInitializers]]: _extraInitializers_, [[Decorators]]: ~empty~ }.
+        1. Return ClassElementDefinition Record { [[Key]]: _name_, [[Kind]]: ~accessor~, [[Get]]: _getter_, [[Set]]: _setter_, [[BackingStorageKey]]: _privateStateName_, [[Initializer]]: _initializer_, [[Initializers]]: _initializers_, [[ExtraInitializers]]: _extraInitializers_, [[Decorators]]: ~empty~ }.
       </emu-alg>
       <emu-note>
         The function created for _initializer_ is never directly accessible to ECMAScript code.
@@ -25618,20 +25635,24 @@
               1. Set the running execution context's PrivateEnvironment to _outerPrivateEnvironment_.
               1. Return ? _result_.
         1. For each element _e_ of _staticElements_, do
-          1. If _e_.[[Kind]] is ~field~, then
-            1. Let _result_ be Completion(ApplyDecoratorsToElementDefinition(_F_, _e_, _e_.[[ExtraInitializers]], *true*)).
+          1. If _e_ is a ClassElementDefinition Record and _e_.[[Kind]] is ~field~, then
+            1. Let _result_ be Completion(ApplyDecoratorsToElementDefinition(_e_, _e_.[[ExtraInitializers]], *true*)).
             1. If _result_ is an abrupt completion, then
               1. Set the running execution context's PrivateEnvironment to _outerPrivateEnvironment_.
               1. Return ? _result_.
         1. For each element _e_ of _instanceElements_, do
-          1. If _e_.[[Kind]] is ~field~, then
-            1. Let _result_ be Completion(ApplyDecoratorsToElementDefinition(_proto_, _e_, _e_.[[ExtraInitializers]], *false*)).
+          1. If _e_ is a ClassElementDefinition Record and _e_.[[Kind]] is ~field~, then
+            1. Let _result_ be Completion(ApplyDecoratorsToElementDefinition(_e_, _e_.[[ExtraInitializers]], *false*)).
             1. If _result_ is an abrupt completion, then
               1. Set the running execution context's PrivateEnvironment to _outerPrivateEnvironment_.
               1. Return ? _result_.
         1. Set _F_.[[Elements]] to _instanceElements_.
         1. Set _F_.[[Initializers]] to _instanceMethodExtraInitializers_.
-        1. Perform ? InitializePrivateMethods(_F_, _staticElements_).
+        1. Let _staticElementsExcludeStaticBlocks_ be a new empty List.
+        1. For each element _e_ of _staticElements_, do
+          1. If _e_ is a ClassElementDefinition Record, then
+            1. Append _e_ to _staticElementsExcludeStaticBlocks_.
+        1. Perform ? InitializePrivateMethods(_F_, _staticElementsExcludeStaticBlocks_).
         1. Let _classExtraInitializers_ be a new empty List.
         1. Let _newF_ be Completion(ApplyDecoratorsToClassDefinition(_F_, _decorators_, _className_, _classExtraInitializers_)).
         1. If _newF_ is an abrupt completion, then
