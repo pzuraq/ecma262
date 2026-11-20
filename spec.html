@@ -29500,8 +29500,12 @@
         </emu-alg>
         <emu-grammar>ExportDeclaration : DecoratorList? `export` `default` ClassDeclaration</emu-grammar>
         <emu-alg>
-          1. If |DecoratorList| is present, let _decorators_ be ? DecoratorListEvaluation of |DecoratorList|.
-          1. Else, let _decorators_ be a new empty List.
+          1. If |DecoratorList| is present, then
+            1. Let _decorators_ be ? DecoratorListEvaluation of |DecoratorList|.
+          1. Else if the |DecoratorList| of |ClassDeclaration| is present, then
+            1. Let _decorators_ be ? DecoratorListEvaluation of the |DecoratorList| of |ClassDeclaration|.
+          1. Else,
+            1. Let _decorators_ be a new empty List.
           1. Let _value_ be ? BindingClassDeclarationEvaluation of |ClassDeclaration| with argument _decorators_.
           1. Let _className_ be the sole element of BoundNames of |ClassDeclaration|.
           1. If _className_ is *"\*default\*"*, then
