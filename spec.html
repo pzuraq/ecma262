@@ -24717,8 +24717,16 @@
             1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"private"*, *false*).
             1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"name"*, _name_).
         1. Else,
-          1. Assert: _name_ is a property key.
-          1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"name"*, _name_).
+          1. If _name_ is a Private Name, then
+            1. Let _className_ be _name_.[[Description]].
+          1. Else if _name_ is a Symbol, then
+            1. Let _description_ be _name_.[[Description]].
+            1. If _description_ is *undefined*, let _className_ be the empty String.
+            1. Else, let _className_ be the string-concatenation of *"["*, _description_, and *"]"*.
+          1. Else,
+            1. Let _className_ be _name_.
+          1. NOTE: _className_ is the same String that SetFunctionName uses as the *"name"* property of the class.
+          1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"name"*, _className_).
         1. Let _addInitializer_ be CreateAddInitializerFunction(_initializers_, _decorationState_).
         1. Perform ! CreateDataPropertyOrThrow(_contextObj_, *"addInitializer"*, _addInitializer_).
         1. Return _contextObj_.
