@@ -4708,9 +4708,9 @@
           </tr>
           <tr>
             <td>[[Receiver]]</td>
-            <td>a Reference Record or an ECMAScript language value</td>
+            <td>an ECMAScript language value</td>
             <td>
-              The receiver that the decorator should be called with.
+              The *this* value that the decorator is called with. It is the same *this* value that a call expression with the same callee uses.
             </td>
           </tr>
         </table>
@@ -24583,21 +24583,42 @@
         1. Let _expr_ be the |MemberExpression| that is covered by |DecoratorMemberExpression|.
         1. Let _ref_ be ? Evaluation of _expr_.
         1. Let _value_ be ? GetValue(_ref_).
-        1. Return DecoratorDefinition Record { [[Decorator]]: _value_, [[Receiver]]: _ref_ }.
+        1. Return DecoratorDefinition Record { [[Decorator]]: _value_, [[Receiver]]: GetDecoratorReceiver(_ref_) }.
       </emu-alg>
       <emu-grammar>Decorator : `@` DecoratorCallExpression</emu-grammar>
       <emu-alg>
         1. Let _expr_ be the |CallMemberExpression| that is covered by |DecoratorCallExpression|.
         1. Let _ref_ be ? Evaluation of _expr_.
         1. Let _value_ be ? GetValue(_ref_).
-        1. Return DecoratorDefinition Record { [[Decorator]]: _value_, [[Receiver]]: _ref_ }.
+        1. Return DecoratorDefinition Record { [[Decorator]]: _value_, [[Receiver]]: GetDecoratorReceiver(_ref_) }.
       </emu-alg>
       <emu-grammar>Decorator : `@` DecoratorParenthesizedExpression</emu-grammar>
       <emu-alg>
         1. Let _expr_ be the |MemberExpression| that is covered by |DecoratorParenthesizedExpression|.
         1. Let _ref_ be ? Evaluation of _expr_.
         1. Let _value_ be ? GetValue(_ref_).
-        1. Return DecoratorDefinition Record { [[Decorator]]: _value_, [[Receiver]]: _ref_ }.
+        1. Return DecoratorDefinition Record { [[Decorator]]: _value_, [[Receiver]]: GetDecoratorReceiver(_ref_) }.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-getdecoratorreceiver" type="abstract operation">
+      <h1>
+        GetDecoratorReceiver (
+          _ref_: an ECMAScript language value or a Reference Record,
+        ): an ECMAScript language value
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It returns the *this* value for a call to the decorator that _ref_ refers to. The steps are the same as the steps that EvaluateCall uses to find the *this* value.</dd>
+      </dl>
+      <emu-alg>
+        1. If _ref_ is a Reference Record, then
+          1. If IsPropertyReference(_ref_) is *true*, then
+            1. Return GetThisValue(_ref_).
+          1. Let _refEnv_ be _ref_.[[Base]].
+          1. Assert: _refEnv_ is an Environment Record.
+          1. Return _refEnv_.WithBaseObject().
+        1. Return *undefined*.
       </emu-alg>
     </emu-clause>
 
@@ -24766,7 +24787,7 @@
             1. Set _value_ to OrdinaryObjectCreate(%Object.prototype%).
             1. Perform ! CreateDataPropertyOrThrow(_value_, *"get"*, _elementRecord_.[[Get]]).
             1. Perform ! CreateDataPropertyOrThrow(_value_, *"set"*, _elementRecord_.[[Set]]).
-          1. Let _newValue_ be Completion(Call(_decorator_, ? GetValue(_decoratorReceiver_), « _value_, _context_ »)).
+          1. Let _newValue_ be Completion(Call(_decorator_, _decoratorReceiver_, « _value_, _context_ »)).
           1. Set _decorationState_.[[Finished]] to *true*.
           1. ReturnIfAbrupt(_newValue_).
           1. If _kind_ is ~field~, then
@@ -24819,7 +24840,7 @@
           1. Let _decoratorReceiver_ be _decoratorRecord_.[[Receiver]].
           1. Let _decorationState_ be the Record { [[Finished]]: *false* }.
           1. Let _context_ be CreateDecoratorContextObject(~class~, _className_, _extraInitializers_, _decorationState_).
-          1. Let _newDef_ be Completion(Call(_decorator_, ? GetValue(_decoratorReceiver_), « _classDef_, _context_ »)).
+          1. Let _newDef_ be Completion(Call(_decorator_, _decoratorReceiver_, « _classDef_, _context_ »)).
           1. Set _decorationState_.[[Finished]] to *true*.
           1. ReturnIfAbrupt(_newDef_).
           1. If IsCallable(_newDef_) is *true*, then
