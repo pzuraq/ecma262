@@ -25426,7 +25426,7 @@
         1. Else,
           1. Let _initializer_ be ~empty~.
         1. If _name_ is not a Private Name, then
-          1. Let _desc_ be the PropertyDescriptor { [[Get]]: _getter_, [[Set]]: _setter_, [[Enumerable]]: *true*, [[Configurable]]: *true* }.
+          1. Let _desc_ be the PropertyDescriptor { [[Get]]: _getter_, [[Set]]: _setter_, [[Enumerable]]: *false*, [[Configurable]]: *true* }.
           1. Perform ? DefinePropertyOrThrow(_homeObject_, _name_, _desc_).
         1. Return ClassElementDefinition Record { [[Key]]: _name_, [[Kind]]: ~accessor~, [[Get]]: _getter_, [[Set]]: _setter_, [[BackingStorageKey]]: _privateStateName_, [[Initializer]]: _initializer_, [[Initializers]]: _initializers_, [[ExtraInitializers]]: _extraInitializers_, [[Decorators]]: ~empty~ }.
       </emu-alg>
