@@ -4843,10 +4843,10 @@
               ~field~ and ~accessor~
             </td>
             <td>
-              a ECMAScript function object or ~empty~
+              an ECMAScript function object or ~empty~
             </td>
             <td>
-              The initializers of the field or accessor, if any.
+              The initializer of the field or accessor, if any. It evaluates the |Initializer| of the field or accessor definition.
             </td>
           </tr>
           <tr>
@@ -4860,7 +4860,7 @@
               a List of function objects
             </td>
             <td>
-              The initializers of the field or accessor, if any.
+              The initializers that decorators of the field or accessor returned, if any. They run after [[Initializer]], in the order of the decorators in source text.
             </td>
           </tr>
           <tr>
@@ -6937,7 +6937,7 @@
         1. If _elementRecord_ has a [[BackingStorageKey]] field, let _fieldName_ be _elementRecord_.[[BackingStorageKey]].
         1. Else, let _fieldName_ be _elementRecord_.[[Key]].
         1. If _elementRecord_.[[Initializer]] is not ~empty~, then
-          1. Let _initValue_ be ? Call(_initializer_, _receiver_);
+          1. Let _initValue_ be ? Call(_elementRecord_.[[Initializer]], _receiver_).
         1. Else,
           1. Let _initValue_ be *undefined*.
         1. For each element _initializer_ of _elementRecord_.[[Initializers]], do
