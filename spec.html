@@ -4787,7 +4787,7 @@
               ~accessor~ and ~getter~
             </td>
             <td>
-              an ECMAScript function object
+              a function object
             </td>
             <td>
               The getter for an accessor definition.
@@ -4801,7 +4801,7 @@
               ~accessor~ and ~setter~
             </td>
             <td>
-              an ECMAScript function object
+              a function object
             </td>
             <td>
               The setter for an accessor definition.
@@ -25354,8 +25354,7 @@
     <emu-clause id="sec-makeautoaccessorgetter" type="abstract operation">
       <h1>
         MakeAutoAccessorGetter (
-          _homeObject_: an Object,
-          _name_: a property key or Private Name,
+          _name_: a property key or a Private Name,
           _privateStateName_: a Private Name,
         ): a function object
       </h1>
@@ -25365,17 +25364,14 @@
         1. Let _getterClosure_ be a new Abstract Closure with no parameters that captures _privateStateName_ and performs the following steps when called:
           1. Let _o_ be the *this* value.
           1. Return ? PrivateGet(_o_, _privateStateName_).
-        1. Let _getter_ be CreateBuiltinFunction(_getterClosure_, 0, *"get"*, « »).
-        1. Perform MakeMethod(_getter_, _homeObject_).
-        1. Return _getter_.
+        1. Return CreateBuiltinFunction(_getterClosure_, 0, _name_, « », the current Realm Record, %Function.prototype%, *"get"*).
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-makeautoaccessorsetter" type="abstract operation">
       <h1>
         MakeAutoAccessorSetter (
-          _homeObject_: an Object,
-          _name_: a property key or Private Name,
+          _name_: a property key or a Private Name,
           _privateStateName_: a Private Name,
         ): a function object
       </h1>
@@ -25386,9 +25382,7 @@
           1. Let _o_ be the *this* value.
           1. Perform ? PrivateSet(_o_, _privateStateName_, _value_).
           1. Return *undefined*.
-        1. Let _setter_ be CreateBuiltinFunction(_setterClosure_, 1, *"set"*, « »).
-        1. Perform MakeMethod(_setter_, _homeObject_).
-        1. Return _setter_.
+        1. Return CreateBuiltinFunction(_setterClosure_, 1, _name_, « », the current Realm Record, %Function.prototype%, *"set"*).
       </emu-alg>
     </emu-clause>
 
@@ -25423,8 +25417,8 @@
         1. Else, let _readableName_ be _name_.
         1. Let _privateStateDesc_ be the string-concatenation of _readableName_ and *" accessor storage"*.
         1. Let _privateStateName_ be a new Private Name whose [[Description]] is _privateStateDesc_.
-        1. Let _getter_ be MakeAutoAccessorGetter(_homeObject_, _name_, _privateStateName_).
-        1. Let _setter_ be MakeAutoAccessorSetter(_homeObject_, _name_, _privateStateName_).
+        1. Let _getter_ be MakeAutoAccessorGetter(_name_, _privateStateName_).
+        1. Let _setter_ be MakeAutoAccessorSetter(_name_, _privateStateName_).
         1. Let _initializers_ be a new empty List.
         1. Let _extraInitializers_ be a new empty List.
         1. If |Initializer?| is present, then
